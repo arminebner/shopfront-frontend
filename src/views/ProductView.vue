@@ -1,0 +1,37 @@
+<template>
+  <v-card class="mx-auto" max-width="344">
+    <v-img :src="`${product.image}/350`" aspect-ratio="1.5"></v-img>
+    <v-card-title class="font-weight-light">{{ product.name }}</v-card-title>
+    <v-card-subtitle class="font-weight-light">9</v-card-subtitle>
+    <v-card-actions>
+      <v-btn color="primary">Add to Cart</v-btn>
+    </v-card-actions>
+  </v-card>
+</template>
+
+<script setup lang="ts">
+import { onBeforeMount, ref } from "vue";
+import { useRoute } from "vue-router";
+import type Product from "@/types/Product";
+import dataFetcher from "@/utils/DataFetcher";
+
+onBeforeMount(() => {
+  const params = useRoute().params;
+  const id = params.id as string;
+  fetchProduct(id);
+});
+
+const product = ref<Product>({
+  name: "placeholder",
+  image: "placeholder",
+  id: 1,
+});
+
+const fetchProduct = async (id: string) => {
+  try {
+    product.value = await dataFetcher(`product/${id}`);
+  } catch (error) {
+    console.log(error);
+  }
+};
+</script>
