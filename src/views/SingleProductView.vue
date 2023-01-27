@@ -23,7 +23,7 @@ onBeforeMount(() => {
 
 const product = ref<Product>({
   name: "placeholder",
-  image: "placeholder",
+  image_url: "placeholder",
   id: 1,
 });
 

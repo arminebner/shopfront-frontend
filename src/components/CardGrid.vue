@@ -5,7 +5,7 @@
         <v-card flat class="bg-primary text-center ma-3">
           <v-card-item>
             <v-card-title class="mb-2">{{ product.name }}</v-card-title>
-            <v-img :src="`${product.image}/200?image=${product.id * 5 + 10}`"></v-img>
+            <v-img :src="`${product.image_url}/200`"></v-img>
             <v-card-text
               >Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam,
               facere?</v-card-text
