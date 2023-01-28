@@ -24,6 +24,13 @@ class ProductManagementDashboardTester {
   static showsProductNotFoundError(id: string) {
     cy.contains('div', `The product with the id: ${id} was not found.`)
   }
+  static updateProduct(properties: { productToUpdate: string; update: string }) {
+    cy.contains('tr', properties.productToUpdate).within(() => {
+      cy.get('#edit-button').click()
+      cy.wait(2000)
+      cy.get('input[name="productName"]').clear().type(properties.update)
+    })
+  }
 }
 
 export default ProductManagementDashboardTester

@@ -11,16 +11,68 @@
     </thead>
     <tbody>
       <tr v-for="product in products" :key="product.id">
-        <td>{{ product.name }}</td>
-        <td>{{ product.image_url }}</td>
-        <td>{{ product.price }}</td>
         <td>
-          <v-btn prepend-icon="mdi-file-edit"></v-btn>
-          <v-btn
-            id="delete-button"
-            prepend-icon="mdi-delete"
-            @click="emit('deleteProduct', product.id)"
-          ></v-btn>
+          <v-text-field
+            id="input-field"
+            v-if="editingProductId === product.id"
+            v-model="name"
+            label="Name"
+            name="productName"
+            clearable
+            required
+          ></v-text-field>
+          <div v-else>{{ product.name }}</div>
+        </td>
+        <td>
+          <v-text-field
+            v-if="editingProductId === product.id"
+            v-model="image"
+            label="Image"
+            name="productImage"
+            clearable
+            required
+          ></v-text-field>
+          <div v-else>
+            {{ product.image_url }}
+          </div>
+        </td>
+        <td>
+          <v-text-field
+            v-if="editingProductId === product.id"
+            v-model="price"
+            label="Price"
+            name="productPrice"
+            clearable
+            required
+          ></v-text-field>
+          <div v-else>
+            {{ product.price }}
+          </div>
+        </td>
+        <td>
+          <div v-if="editingProductId === product.id">
+            <v-btn
+              id="save-button"
+              prepend-icon="mdi-check"
+              @click="validateForm"
+            ></v-btn>
+            <v-btn
+              prepend-icon="mdi-alpha-x-box"
+              @click="editingProductId = null"
+            ></v-btn>
+          </div>
+          <div v-else>
+            <v-btn
+              id="edit-button"
+              prepend-icon="mdi-file-edit"
+              @click="editProduct(product)"
+            ></v-btn>
+            <v-btn
+              id="delete-button"
+              prepend-icon="mdi-delete"
+              @click="emit('deleteProduct', product.id)"
+            ></v-btn>
+          </div>
         </td>
       </tr>
     </tbody>
@@ -28,7 +80,7 @@
 </template>
 
 <script setup lang="ts">
-import type { PropType } from "vue";
+import { ref, type PropType } from "vue";
 import type Product from "@/types/Product";
 
 defineProps({
@@ -40,5 +92,28 @@ defineProps({
 
 const emit = defineEmits<{
   (e: "deleteProduct", id: string): void;
+  (e: "updateProduct", id: string, name: string, price: string, image: string): void;
 }>();
+
+const valid = ref<boolean>(true);
+const id = ref<string>('')
+const name = ref<string>("");
+const image = ref<string>("");
+const price = ref<string>("");
+const editingProductId = ref<string | null>('')
+
+const validateForm = () => {
+  if (valid) {
+    emit("updateProduct", id.value, name.value, price.value, image.value);
+    editingProductId.value = null
+  }
+};
+
+const editProduct = (product: Product) => {
+  editingProductId.value = product.id
+  id.value = product.id
+  name.value = product.name
+  image.value = product.image_url
+  price.value = product.price
+}
 </script>

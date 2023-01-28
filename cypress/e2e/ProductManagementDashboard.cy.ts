@@ -24,6 +24,7 @@ describe('The product management dashboard', () => {
   it('shows an error when a product could not be added', () => {
     const product = createProduct(Date.now())
     ProductManagementDashboardTester.addProduct(product)
+
     ProductManagementDashboardTester.addProduct(product)
 
     ProductManagementDashboardTester.showsProductNameExistsError()
@@ -36,5 +37,16 @@ describe('The product management dashboard', () => {
     ProductManagementDashboardTester.deletesProduct(product.name)
 
     ProductManagementDashboardTester.doesNotShow(product.name)
+  })
+
+  xit('allows to update a product', () => {
+    // Cypress overflow:hidden BUG (?)
+    const product = createProduct(Date.now())
+    ProductManagementDashboardTester.addProduct(product)
+
+    ProductManagementDashboardTester.updateProduct({
+      productToUpdate: product.name,
+      update: `UPDATED_Product: ${Date.now()}`,
+    })
   })
 })

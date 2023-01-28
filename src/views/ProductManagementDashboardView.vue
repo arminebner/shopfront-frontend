@@ -10,6 +10,7 @@
   <product-table
     v-else
     @delete-product="deleteProduct"
+    @update-product="updateProduct"
     :products="products"
   ></product-table>
 </template>
@@ -59,6 +60,22 @@ const deleteProduct = async (id: string) => {
   try {
     await axios.delete(`http://localhost:5000/api/product/${id}`);
     products.value = products.value.filter((product) => product.id !== id);
+  } catch (e) {
+    const error = e as AxiosError;
+    const message = error.response?.data as string;
+    errorMessage.value = message;
+  }
+};
+
+const updateProduct = async (id: string, name: string, price: string, image: string) => {
+  try {
+    await axios.put(`http://localhost:5000/api/product`, {
+      id,
+      name,
+      price,
+      image_url: image,
+    });
+    fetchProducts();
   } catch (e) {
     const error = e as AxiosError;
     const message = error.response?.data as string;
