@@ -1,8 +1,8 @@
 <template>
   <v-card class="mx-auto" max-width="344">
-    <v-img :src="`${product.image}/350`" aspect-ratio="1.5"></v-img>
+    <v-img :src="`${product.image_url}/350`" aspect-ratio="1.5"></v-img>
     <v-card-title class="font-weight-light">{{ product.name }}</v-card-title>
-    <v-card-subtitle class="font-weight-light">9</v-card-subtitle>
+    <v-card-subtitle class="font-weight-light">{{ product.price }}</v-card-subtitle>
     <v-card-actions>
       <v-btn color="primary">Add to Cart</v-btn>
     </v-card-actions>
@@ -23,6 +23,7 @@ onBeforeMount(() => {
 
 const product = ref<Product>({
   name: "placeholder",
+  price: "0",
   image_url: "placeholder",
   id: 1,
 });

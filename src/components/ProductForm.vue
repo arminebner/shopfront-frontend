@@ -38,10 +38,11 @@
     </v-container>
   </v-form>
   <v-btn prepend-icon="mdi-plus" @click="submitForm">Add Product</v-btn>
+  <v-alert v-if="errorMessage" type="error"> {{ errorMessage }}</v-alert>
 </template>
 
 <script setup lang="ts">
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { ref } from "vue";
 
 const emit = defineEmits<{
@@ -52,6 +53,7 @@ const valid = ref<boolean>(false);
 const name = ref<string>("");
 const image = ref<string>("");
 const price = ref<string>("");
+const errorMessage = ref<string>("");
 
 const submitForm = async () => {
   try {
@@ -61,8 +63,10 @@ const submitForm = async () => {
       image_url: image.value,
     });
     emit("product-added");
-  } catch (error) {
-    console.log(error);
+  } catch (e) {
+    const error = e as AxiosError;
+    const message = error.response?.data as string;
+    errorMessage.value = message;
   }
 };
 </script>
