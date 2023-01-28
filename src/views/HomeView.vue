@@ -23,12 +23,13 @@
 import CardGrid from "@/components/CardGrid.vue";
 import { onBeforeMount, ref } from "vue";
 import dataFetcher from "@/utils/DataFetcher";
+import type Product from "@/types/Product";
 
 onBeforeMount(() => {
   fetchProducts();
 });
 
-const products = ref([]);
+const products = ref<Product[]>([]);
 const isLoading = ref(false);
 
 const fetchProducts = async () => {

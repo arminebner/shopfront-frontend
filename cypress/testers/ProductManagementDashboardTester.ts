@@ -10,8 +10,19 @@ class ProductManagementDashboardTester {
   static showsProduct(productName: string) {
     cy.contains('div', productName)
   }
-  static showsError() {
+  static deletesProduct(name: string) {
+    cy.contains('tr', name).within(() => {
+      cy.get('#delete-button').click()
+    })
+  }
+  static doesNotShow(productName: string) {
+    cy.contains(productName).should('not.exist')
+  }
+  static showsProductNameExistsError() {
     cy.contains('div', 'This product name is already taken.')
+  }
+  static showsProductNotFoundError(id: string) {
+    cy.contains('div', `The product with the id: ${id} was not found.`)
   }
 }
 
