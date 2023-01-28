@@ -26,6 +26,15 @@ describe('The product management dashboard', () => {
     ProductManagementDashboardTester.addProduct(product)
     ProductManagementDashboardTester.addProduct(product)
 
-    ProductManagementDashboardTester.showsError()
+    ProductManagementDashboardTester.showsProductNameExistsError()
+  })
+
+  it('allows to delete a product', () => {
+    const product = createProduct(Date.now())
+    ProductManagementDashboardTester.addProduct(product)
+
+    ProductManagementDashboardTester.deletesProduct(product.name)
+
+    ProductManagementDashboardTester.doesNotShow(product.name)
   })
 })
