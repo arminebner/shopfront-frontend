@@ -70,6 +70,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
+import ProductRules from "../validation/product.validation";
 
 const emit = defineEmits<{
   (
@@ -90,63 +91,10 @@ const image = ref<string>("");
 const price = ref<string>("");
 const form: any = ref(null);
 
-const nameRules = [
-  (value: string) => {
-    if (value) return true;
-
-    return "Name is requred.";
-  },
-  (value: string) => {
-    if (value?.length <= 30 && value?.length >= 1) return true;
-
-    return "Name must be less than 30 characters.";
-  },
-];
-
-const shortDescriptionRules = [
-  (value: string) => {
-    if (value) return true;
-
-    return "Name is requred.";
-  },
-  (value: string) => {
-    if (value?.length <= 100 && value?.length >= 1) return true;
-
-    return "The short description must be less than 100 characters.";
-  },
-];
-
-const descriptionRules = [
-  (value: string) => {
-    if (value) return true;
-
-    return "Name is requred.";
-  },
-  (value: string) => {
-    if (value?.length <= 300) return true;
-
-    return "The description must be less than 300 characters.";
-  },
-];
-
-const priceRules = [
-  (value: string) => {
-    if (value) return true;
-
-    return "Price is requred.";
-  },
-  (value: string) => {
-    if (value?.length <= 7) return true;
-
-    return "Price must be less than 7 characters.";
-  },
-  (value: string) => {
-    const regex = /^\d+(\.\d+)?$/;
-    if (regex.test(value)) return true;
-
-    return "Price must only contain digits.";
-  },
-];
+const nameRules = ProductRules.name;
+const shortDescriptionRules = ProductRules.shortDescription;
+const descriptionRules = ProductRules.description;
+const priceRules = ProductRules.price;
 
 function customEncodeURIComponent(str: string) {
   return encodeURIComponent(str).replace(/%3A%20/g, ": ");
