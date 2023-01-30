@@ -41,10 +41,18 @@ const fetchProducts = async () => {
   isLoading.value = false;
 };
 
-const submitForm = async (name: string, price: string, image: string) => {
+const submitForm = async (
+  name: string,
+  shortDescription: string,
+  description: string,
+  price: string,
+  image: string
+) => {
   try {
     await axios.post("http://localhost:5000/api/product", {
       name,
+      short_description: shortDescription,
+      description,
       price,
       image_url: image,
     });
@@ -67,11 +75,20 @@ const deleteProduct = async (id: string) => {
   }
 };
 
-const updateProduct = async (id: string, name: string, price: string, image: string) => {
+const updateProduct = async (
+  id: string,
+  name: string,
+  shortDescription: string,
+  description: string,
+  price: string,
+  image: string
+) => {
   try {
     await axios.put(`http://localhost:5000/api/product`, {
       id,
       name,
+      short_description: shortDescription,
+      description,
       price,
       image_url: image,
     });

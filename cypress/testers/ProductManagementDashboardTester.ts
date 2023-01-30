@@ -3,6 +3,8 @@ import type Product from '../../src/types/Product'
 class ProductManagementDashboardTester {
   static addProduct(product: Product) {
     cy.get('input[name="productName"]').clear().type(product.name)
+    cy.get('input[name="shortDescription"]').clear().type(product.short_description)
+    cy.get('input[name="description"]').clear().type(product.description)
     cy.get('input[name="productPrice"]').clear().type(product.price)
     cy.get('input[name="productImage"]').clear().type(product.image_url)
     cy.contains('button', 'Add Product').click()

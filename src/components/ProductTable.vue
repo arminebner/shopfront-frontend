@@ -4,6 +4,8 @@
     <thead>
       <tr>
         <th class="text-left">Name</th>
+        <th class="text-left">Short description</th>
+        <th class="text-left">Description</th>
         <th class="text-left">Image</th>
         <th class="text-left">Price</th>
         <th class="text-left">Actions</th>
@@ -13,10 +15,8 @@
       <tr v-for="product in products" :key="product.id">
         <td>
           <v-text-field
-            id="input-field"
             v-if="editingProductId === product.id"
             v-model="name"
-            label="Name"
             name="productName"
             clearable
             required
@@ -26,8 +26,31 @@
         <td>
           <v-text-field
             v-if="editingProductId === product.id"
+            v-model="shortDescription"
+            name="shortDescription"
+            clearable
+            required
+          ></v-text-field>
+          <div v-else>
+            {{ product.short_description }}
+          </div>
+        </td>
+        <td>
+          <v-text-field
+            v-if="editingProductId === product.id"
+            v-model="description"
+            name="description"
+            clearable
+            required
+          ></v-text-field>
+          <div v-else>
+            {{ product.description }}
+          </div>
+        </td>
+        <td>
+          <v-text-field
+            v-if="editingProductId === product.id"
             v-model="image"
-            label="Image"
             name="productImage"
             clearable
             required
@@ -40,7 +63,6 @@
           <v-text-field
             v-if="editingProductId === product.id"
             v-model="price"
-            label="Price"
             name="productPrice"
             clearable
             required
@@ -92,19 +114,21 @@ defineProps({
 
 const emit = defineEmits<{
   (e: "deleteProduct", id: string): void;
-  (e: "updateProduct", id: string, name: string, price: string, image: string): void;
+  (e: "updateProduct", id: string, name: string, short_description: string, description: string, price: string, image: string): void;
 }>();
 
 const valid = ref<boolean>(true);
 const id = ref<string>('')
 const name = ref<string>("");
+const shortDescription = ref<string>("");
+const description = ref<string>("");
 const image = ref<string>("");
 const price = ref<string>("");
 const editingProductId = ref<string | null>('')
 
 const validateForm = () => {
   if (valid) {
-    emit("updateProduct", id.value, name.value, price.value, image.value);
+    emit("updateProduct", id.value, name.value, shortDescription.value, description.value, price.value, image.value);
     editingProductId.value = null
   }
 };
@@ -113,6 +137,8 @@ const editProduct = (product: Product) => {
   editingProductId.value = product.id
   id.value = product.id
   name.value = product.name
+  shortDescription.value = product.short_description
+  description.value = product.description
   image.value = product.image_url
   price.value = product.price
 }

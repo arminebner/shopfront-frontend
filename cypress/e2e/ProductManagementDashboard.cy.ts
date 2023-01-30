@@ -4,6 +4,8 @@ import type Product from '../../src/types/Product'
 function createProduct(date: number) {
   return <Product>{
     name: `Productname: ${date}`,
+    short_description: 'Lorem ipsum dolor sit amet, consetetur sadipsc',
+    description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy',
     price: '5',
     image_url: 'https://picsum.photos/200',
   }
