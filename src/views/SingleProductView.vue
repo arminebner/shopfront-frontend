@@ -12,8 +12,8 @@
 <script setup lang="ts">
 import { onBeforeMount, ref } from "vue";
 import { useRoute } from "vue-router";
-import type Product from "@/types/Product";
-import dataFetcher from "@/utils/DataFetcher";
+import type Product from "@/types/product";
+import dataFetcher from "@/utils/dataFetcher";
 
 onBeforeMount(() => {
   const params = useRoute().params;

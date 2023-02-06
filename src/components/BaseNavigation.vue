@@ -37,7 +37,7 @@
 <script setup lang="ts">
 import { defineComponent, ref } from "vue";
 import { useTheme } from "vuetify";
-import type NavLink from "@/types/NavLink";
+import type NavLink from "@/types/navLink";
 
 defineComponent({
   name: "BaseNavigation",

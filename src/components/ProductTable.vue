@@ -103,7 +103,7 @@
 
 <script setup lang="ts">
 import { ref, type PropType } from "vue";
-import type Product from "@/types/Product";
+import type Product from "@/types/product";
 
 defineProps({
   products: {

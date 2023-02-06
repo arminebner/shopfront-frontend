@@ -4,9 +4,7 @@
   <product-form @form-payload="submitForm"></product-form>
   <v-alert v-if="errorMessage" type="error"> {{ errorMessage }}</v-alert>
   <h2>All Products</h2>
-  <v-row v-if="isLoading"
-    ><v-icon icon="mdi-loading" width="100px" class="mx-auto bg-red"></v-icon
-  ></v-row>
+  <loading-spinner v-if="isLoading"></loading-spinner>
   <product-table
     v-else
     @delete-product="deleteProduct"
@@ -18,10 +16,11 @@
 <script setup lang="ts">
 import { onBeforeMount, ref } from "vue";
 import axios, { AxiosError } from "axios";
-import dataFetcher from "@/utils/DataFetcher";
+import dataFetcher from "@/utils/dataFetcher";
 import ProductForm from "@/components/ProductForm.vue";
 import ProductTable from "@/components/ProductTable.vue";
-import type Product from "@/types/Product";
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
+import type Product from "@/types/product";
 
 const products = ref<Product[]>([]);
 const isLoading = ref(false);

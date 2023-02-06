@@ -22,8 +22,8 @@
 <script setup lang="ts">
 import CardGrid from "@/components/CardGrid.vue";
 import { onBeforeMount, ref } from "vue";
-import dataFetcher from "@/utils/DataFetcher";
-import type Product from "@/types/Product";
+import dataFetcher from "@/utils/dataFetcher";
+import type Product from "@/types/product";
 
 onBeforeMount(() => {
   fetchProducts();
