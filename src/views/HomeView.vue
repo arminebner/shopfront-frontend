@@ -12,9 +12,7 @@
       accusamus sapiente laborum quis illo sit recusandae ipsam quam facere consequuntur
       eos saepe, assumenda soluta? Enim, alias vero?
     </p>
-    <v-row v-if="isLoading"
-      ><v-icon icon="mdi-loading" width="100px" class="mx-auto bg-red"></v-icon
-    ></v-row>
+    <loading-spinner v-if="isLoading"></loading-spinner>
     <card-grid v-else :products="products"></card-grid>
   </v-container>
 </template>
@@ -23,6 +21,7 @@
 import CardGrid from "@/components/CardGrid.vue";
 import { onBeforeMount, ref } from "vue";
 import dataFetcher from "@/utils/dataFetcher";
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import type Product from "@/types/product";
 
 onBeforeMount(() => {

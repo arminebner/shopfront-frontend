@@ -1,6 +1,6 @@
 <template>
   <v-card class="mx-auto" max-width="344">
-    <v-img :src="`${product.image_url}/350`" aspect-ratio="1.5"></v-img>
+    <v-img :src="product.image_url" aspect-ratio="1"></v-img>
     <v-card-title class="font-weight-light">{{ product.name }}</v-card-title>
     <v-card-subtitle class="font-weight-light">{{ product.price }}</v-card-subtitle>
     <v-card-actions>
@@ -25,7 +25,9 @@ const product = ref<Product>({
   name: "placeholder",
   price: "0",
   image_url: "placeholder",
-  id: 1,
+  id: "1",
+  short_description: "",
+  description: "",
 });
 
 const fetchProduct = async (id: string) => {

@@ -48,16 +48,14 @@
           </div>
         </td>
         <td>
-          <v-text-field
+          <v-file-input
             v-if="editingProductId === product.id"
-            v-model="image"
-            name="productImage"
-            clearable
-            required
-          ></v-text-field>
-          <div v-else>
-            {{ product.image_url }}
-          </div>
+            name="fileUpload"
+            accept="image/*"
+            label="File input"
+            @change="addFile"
+          ></v-file-input>
+          <v-img v-else width="100px" :src="product.image_url"></v-img>
         </td>
         <td>
           <v-text-field
@@ -132,6 +130,10 @@ const validateForm = () => {
     editingProductId.value = null
   }
 };
+
+function addFile(event: any) {
+  image.value = event.target.files[0];
+}
 
 const editProduct = (product: Product) => {
   editingProductId.value = product.id

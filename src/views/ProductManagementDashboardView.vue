@@ -48,13 +48,21 @@ const submitForm = async (
   image: string
 ) => {
   try {
-    await axios.post("http://localhost:5000/api/product", {
-      name,
-      short_description: shortDescription,
-      description,
-      price,
-      image_url: image,
-    });
+    await axios.post(
+      "http://localhost:5000/api/product",
+      {
+        name,
+        short_description: shortDescription,
+        description,
+        price,
+        image_url: image,
+      },
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
     fetchProducts();
   } catch (e) {
     const error = e as AxiosError;
@@ -83,14 +91,22 @@ const updateProduct = async (
   image: string
 ) => {
   try {
-    await axios.put(`http://localhost:5000/api/product`, {
-      id,
-      name,
-      short_description: shortDescription,
-      description,
-      price,
-      image_url: image,
-    });
+    await axios.put(
+      `http://localhost:5000/api/product`,
+      {
+        id,
+        name,
+        short_description: shortDescription,
+        description,
+        price,
+        image_url: image,
+      },
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
     fetchProducts();
   } catch (e) {
     const error = e as AxiosError;

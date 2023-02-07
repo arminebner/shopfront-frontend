@@ -1,5 +1,5 @@
 import ProductManagementDashboardTester from '../testers/ProductManagementDashboardTester'
-import type Product from '../../src/types/Product'
+import type Product from '../../src/types/product'
 
 function createProduct(date: number) {
   return <Product>{
@@ -7,7 +7,7 @@ function createProduct(date: number) {
     short_description: 'Lorem ipsum dolor sit amet, consetetur sadipsc',
     description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy',
     price: '5',
-    image_url: 'https://picsum.photos/200',
+    image_url: 'images/testImage.jpg',
   }
 }
 
@@ -20,7 +20,7 @@ describe('The product management dashboard', () => {
     const product = createProduct(Date.now())
     ProductManagementDashboardTester.addProduct(product)
 
-    ProductManagementDashboardTester.showsProduct(product.name)
+    ProductManagementDashboardTester.showsProductWithImage(product.name)
   })
 
   it('shows an error when a product could not be added', () => {

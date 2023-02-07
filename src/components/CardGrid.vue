@@ -5,17 +5,13 @@
         <v-card flat class="bg-primary text-center ma-3">
           <v-card-item>
             <v-card-title class="mb-2">{{ product.name }}</v-card-title>
-            <v-img :src="`${product.image_url}/200`"></v-img>
-            <v-card-text
-              >Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam,
-              facere?</v-card-text
-            >
+            <v-img :src="product.image_url" aspect-ratio="1"></v-img>
+            <v-card-text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam,
+              facere?</v-card-text>
             <v-card-actions class="d-flex justify-space-between">
               <v-btn variant="outlined" prepend-icon="mdi-cart-arrow-down">Add</v-btn>
               <router-link :to="`/product/${product.id}`">
-                <v-btn variant="outlined" prepend-icon="mdi-information-outline"
-                  >Info</v-btn
-                >
+                <v-btn variant="outlined" prepend-icon="mdi-information-outline">Info</v-btn>
               </router-link>
             </v-card-actions>
           </v-card-item>

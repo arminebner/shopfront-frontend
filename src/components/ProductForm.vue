@@ -5,7 +5,7 @@
         <v-col cols="12" md="4">
           <v-text-field
             v-model="name"
-            :rules="nameRules"
+            :rules="ProductRules.name"
             label="Name"
             name="productName"
             clearable
@@ -17,7 +17,7 @@
         <v-col cols="12" md="4">
           <v-text-field
             v-model="shortDescription"
-            :rules="shortDescriptionRules"
+            :rules="ProductRules.shortDescription"
             label="ShortDescription"
             name="shortDescription"
             clearable
@@ -29,7 +29,7 @@
         <v-col cols="12" md="4">
           <v-text-field
             v-model="description"
-            :rules="descriptionRules"
+            :rules="ProductRules.description"
             label="Description"
             name="description"
             clearable
@@ -41,7 +41,7 @@
         <v-col cols="12" md="4">
           <v-text-field
             v-model="price"
-            :rules="priceRules"
+            :rules="ProductRules.price"
             label="Price"
             prefix="$"
             name="productPrice"
@@ -52,13 +52,12 @@
       </v-row>
       <v-row>
         <v-col cols="12" md="4">
-          <v-text-field
-            v-model="image"
-            label="Image"
-            name="productImage"
-            clearable
-            required
-          ></v-text-field>
+          <v-file-input
+            name="fileUpload"
+            accept="image/*"
+            label="File input"
+            @change="addFile"
+          ></v-file-input>
         </v-col>
       </v-row>
     </v-container>
@@ -70,7 +69,7 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import ProductRules from "../validation/product.validation";
+import ProductRules from "../validation/productValidation";
 
 const emit = defineEmits<{
   (
@@ -91,13 +90,12 @@ const image = ref<string>("");
 const price = ref<string>("");
 const form: any = ref(null);
 
-const nameRules = ProductRules.name;
-const shortDescriptionRules = ProductRules.shortDescription;
-const descriptionRules = ProductRules.description;
-const priceRules = ProductRules.price;
-
 function customEncodeURIComponent(str: string) {
   return encodeURIComponent(str).replace(/%3A%20/g, ": ");
+}
+
+function addFile(event: any) {
+  image.value = event.target.files[0];
 }
 
 const sanitizeForm = () => {
