@@ -45,7 +45,7 @@ const productRules = {
       const regex = /^\d+(\.\d+)?$/
       if (regex.test(value)) return true
 
-      return 'Price must only contain digits.'
+      return 'Price must only contain digits and a dot.'
     },
   ],
 }
