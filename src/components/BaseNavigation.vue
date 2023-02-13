@@ -16,13 +16,10 @@
     </v-list>
   </v-navigation-drawer>
   <v-app-bar flat class="bg-primary">
+    <v-app-bar-nav-icon @click="drawerOpen = !drawerOpen" />
     <v-app-bar-title>
-      <router-link to="/">Amandarando</router-link>
+      {{ $route.name }}
     </v-app-bar-title>
-    <router-link to="/cart">
-      <v-btn prepend-icon="mdi-cart"></v-btn>
-    </router-link>
-    <v-btn prepend-icon="mdi-account"></v-btn>
     <v-btn
       :prepend-icon="
         theme.global.name.value === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'
@@ -30,7 +27,9 @@
       @click="toggleTheme"
     >
     </v-btn>
-    <v-app-bar-nav-icon @click="drawerOpen = !drawerOpen" />
+    <router-link to="/cart">
+      <v-btn prepend-icon="mdi-cart"></v-btn>
+    </router-link>
   </v-app-bar>
 </template>
 
@@ -45,15 +44,18 @@ defineComponent({
 });
 
 const theme = useTheme();
+const drawerOpen = ref(false);
+const navLinks = <NavLink[]>[
+  { title: "Start", route: "/", icon: "mdi-home" },
+  { title: "Shop", route: "/shop", icon: "mdi-store" },
+  { title: "Login", route: "/login", icon: "mdi-account" },
+  {
+    title: "Product Management",
+    route: "/productManagementDashboard",
+    icon: "mdi-store-plus",
+  },
+];
+
 const toggleTheme = () =>
   (theme.global.name.value = theme.global.current.value.dark ? "light" : "dark");
-
-const drawerOpen = ref(false);
-
-const navLinks = <NavLink[]>[
-  { title: "Home", route: "/", icon: "mdi-home" },
-  { title: "Shared with me", route: "/", icon: "mdi-account-multiple" },
-  { title: "Starred", route: "/", icon: "mdi-star" },
-  { title: "Recent", route: "/", icon: "mdi-history" },
-];
 </script>

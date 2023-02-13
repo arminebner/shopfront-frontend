@@ -12,32 +12,8 @@
       accusamus sapiente laborum quis illo sit recusandae ipsam quam facere consequuntur
       eos saepe, assumenda soluta? Enim, alias vero?
     </p>
-    <loading-spinner v-if="isLoading"></loading-spinner>
-    <card-grid v-else :products="products"></card-grid>
+    <router-link :to="`/shop`">SHOP</router-link>
   </v-container>
 </template>
 
-<script setup lang="ts">
-import CardGrid from "@/components/CardGrid.vue";
-import { onBeforeMount, ref } from "vue";
-import dataFetcher from "@/utils/dataFetcher";
-import LoadingSpinner from "@/components/LoadingSpinner.vue";
-import type Product from "@/types/product";
-
-onBeforeMount(() => {
-  fetchProducts();
-});
-
-const products = ref<Product[]>([]);
-const isLoading = ref(false);
-
-const fetchProducts = async () => {
-  try {
-    isLoading.value = true;
-    products.value = await dataFetcher("products");
-  } catch (error) {
-    console.log(error);
-  }
-  isLoading.value = false;
-};
-</script>
+<script setup lang="ts"></script>

@@ -4,7 +4,7 @@
     <v-card-title class="font-weight-light">{{ product.name }}</v-card-title>
     <v-card-subtitle class="font-weight-light">{{ product.price }}</v-card-subtitle>
     <v-card-actions>
-      <v-btn color="primary">Add to Cart</v-btn>
+      <v-btn color="primary" @click="addToCart(product)">Add to Cart</v-btn>
     </v-card-actions>
   </v-card>
 </template>
@@ -14,12 +14,15 @@ import { onBeforeMount, ref } from "vue";
 import { useRoute } from "vue-router";
 import type Product from "@/types/product";
 import dataFetcher from "@/utils/dataFetcher";
+import { cartStore } from "@/stores/cartStore";
 
 onBeforeMount(() => {
   const params = useRoute().params;
   const id = params.id as string;
   fetchProduct(id);
 });
+
+const cart = cartStore();
 
 const product = ref<Product>({
   name: "placeholder",
@@ -36,5 +39,9 @@ const fetchProduct = async (id: string) => {
   } catch (error) {
     console.log(error);
   }
+};
+
+const addToCart = (product: Product) => {
+  cart.addItem(product);
 };
 </script>

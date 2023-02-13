@@ -42,7 +42,7 @@ const productRules = {
       return 'Price must be less than 7 characters.'
     },
     (value: string) => {
-      const regex = /^\d+(\.\d+)?$/
+      const regex = /^\d+\.\d+?$/
       if (regex.test(value)) return true
 
       return 'Price must only contain digits and a dot.'

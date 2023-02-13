@@ -1,5 +1,4 @@
 <template>
-  <h2>List of products</h2>
   <v-table fixed-header height="300px">
     <thead>
       <tr>
@@ -137,11 +136,5 @@ function addFile(event: any) {
 
 const editProduct = (product: Product) => {
   editingProductId.value = product.id
-  id.value = product.id
-  name.value = product.name
-  shortDescription.value = product.short_description
-  description.value = product.description
-  image.value = product.image_url
-  price.value = product.price
 }
 </script>
