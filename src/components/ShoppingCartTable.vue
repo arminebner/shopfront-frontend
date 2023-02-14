@@ -13,7 +13,13 @@
     <tbody>
       <tr v-for="product in products" :key="product.id">
         <td>
-          {{ product.quantity }}
+          <v-row>
+            {{ product.quantity }}
+            <div>
+              <v-btn prepend-icon="mdi-menu-up" @click="addItemInstance(product)"></v-btn>
+              <v-btn prepend-icon="mdi-menu-down" @click="removeFromCart(product.cartId)"></v-btn>
+            </div>
+          </v-row>
         </td>
         <td>
           <v-img width="100px" :src="product.image_url"></v-img>
@@ -56,7 +62,8 @@ const props = defineProps({
 });
 
 const emit = defineEmits<{
-  (e: "removeFromCart", id: string): void;
+  (e: "removeFromCart", cartId: string): void;
+  (e: "addItemInstance", cartItem: CartItem): void;
 }>();
 
 const totalAmount = computed(() => {
@@ -72,5 +79,9 @@ const startOrderingProcess = () => {
 
 const removeFromCart = (cartId: string) => {
   emit("removeFromCart", cartId)
+}
+
+const addItemInstance = (cartItem: CartItem) => {
+  emit("addItemInstance", cartItem)
 }
 </script>
