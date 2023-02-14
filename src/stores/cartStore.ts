@@ -1,19 +1,19 @@
 import type Product from '@/types/product'
 import { defineStore } from 'pinia'
+import { ref } from 'vue'
 
-export const cartStore = defineStore('cart', {
-  state: () => ({
-    cart: <Product[]>[],
-  }),
-  actions: {
-    addItem(product: Product) {
-      this.cart.push(product)
-    },
-    deleteItem(id: any) {
-      this.cart = this.cart.filter(product => product.id !== id)
-    },
-    clear() {
-      this.cart = []
-    },
-  },
+export const useCartStore = defineStore('cart', () => {
+  const products = ref<Product[]>([])
+
+  const addItem = (product: Product) => products.value.push(product)
+
+  const deleteItem = (id: string) => {
+    products.value = products.value.filter(p => p.id !== id)
+  }
+
+  return {
+    products,
+    addItem,
+    deleteItem,
+  }
 })

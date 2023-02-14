@@ -28,7 +28,24 @@ const vuetify = createVuetify({
 const app = createApp(App)
 
 app.use(vuetify)
-app.use(createPinia())
+
+const pinia = createPinia()
+pinia.use(context => {
+  const storeId = context.store.$id
+
+  context.store.$subscribe((mutation, state) => {
+    window.localStorage.setItem(storeId, JSON.stringify(state))
+  })
+
+  const localData = window.localStorage.getItem(storeId)
+  if (localData) {
+    const localStore = JSON.parse(localData)
+    context.store.$patch(localStore)
+  }
+})
+
+app.use(pinia)
+
 app.use(router)
 
 app.mount('#app')

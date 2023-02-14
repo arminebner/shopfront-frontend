@@ -6,21 +6,12 @@
           <v-card-item>
             <v-card-title class="mb-2">{{ product.name }}</v-card-title>
             <v-img :src="product.image_url" aspect-ratio="1"></v-img>
-            <v-card-text
-              >Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam,
-              facere?</v-card-text
-            >
+            <v-card-text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam,
+              facere?</v-card-text>
             <v-card-actions class="d-flex justify-space-between">
-              <v-btn
-                variant="outlined"
-                prepend-icon="mdi-cart-arrow-down"
-                @click="addToCart(product)"
-                >Add</v-btn
-              >
+              <v-btn variant="outlined" prepend-icon="mdi-cart-arrow-down" @click="addToCart(product)">Add</v-btn>
               <router-link :to="`/product/${product.id}`">
-                <v-btn variant="outlined" prepend-icon="mdi-information-outline"
-                  >Info</v-btn
-                >
+                <v-btn variant="outlined" prepend-icon="mdi-information-outline">Info</v-btn>
               </router-link>
             </v-card-actions>
           </v-card-item>
@@ -33,7 +24,7 @@
 <script setup lang="ts">
 import type { PropType } from "vue";
 import type Product from "@/types/product";
-import { cartStore } from "@/stores/cartStore";
+import { useCartStore } from "@/stores/cartStore";
 
 defineProps({
   products: {
@@ -42,9 +33,9 @@ defineProps({
   },
 });
 
-const cart = cartStore();
+const store = useCartStore();
 
 const addToCart = (product: Product) => {
-  cart.addItem(product);
+  store.addItem(product);
 };
 </script>

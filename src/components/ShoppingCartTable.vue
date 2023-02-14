@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, type PropType } from "vue";
+import { computed, type PropType } from "vue";
 import type Product from "@/types/product";
 
 const props = defineProps({
@@ -55,7 +55,7 @@ const emit = defineEmits<{
 }>();
 
 const totalAmount = computed(() => {
-  const total = props.products.reduce((acc: any, product: any) => {
+  const total = props.products.reduce((acc: any, product: Product) => {
     return acc + parseFloat(product.price)
   }, 0)
   return total.toFixed(2)

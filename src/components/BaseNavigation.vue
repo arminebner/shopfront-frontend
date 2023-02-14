@@ -1,13 +1,7 @@
 <template>
   <v-navigation-drawer v-model="drawerOpen" temporary>
     <v-list nav density="compact">
-      <v-list-item
-        v-for="(link, i) in navLinks"
-        :key="i"
-        router
-        :to="link.route"
-        active-color="primary"
-      >
+      <v-list-item v-for="(link, i) in navLinks" :key="i" router :to="link.route" active-color="primary">
         <template v-slot:prepend>
           <v-icon :icon="link.icon"></v-icon>
         </template>
@@ -20,29 +14,28 @@
     <v-app-bar-title>
       {{ $route.name }}
     </v-app-bar-title>
-    <v-btn
-      :prepend-icon="
-        theme.global.name.value === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'
-      "
-      @click="toggleTheme"
-    >
+    <v-btn :prepend-icon="
+      theme.global.name.value === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'
+    " @click="toggleTheme">
     </v-btn>
     <router-link to="/cart">
-      <v-btn prepend-icon="mdi-cart"></v-btn>
+      <v-btn prepend-icon="mdi-cart">{{ cartCount }}</v-btn>
     </router-link>
   </v-app-bar>
 </template>
 
 <script setup lang="ts">
-import { defineComponent, ref } from "vue";
+import { computed, defineComponent, ref } from "vue";
 import { useTheme } from "vuetify";
 import type NavLink from "@/types/navLink";
+import { useCartStore } from "@/stores/cartStore";
 
 defineComponent({
   name: "BaseNavigation",
   components: {},
 });
 
+const store = useCartStore();
 const theme = useTheme();
 const drawerOpen = ref(false);
 const navLinks = <NavLink[]>[
@@ -58,4 +51,8 @@ const navLinks = <NavLink[]>[
 
 const toggleTheme = () =>
   (theme.global.name.value = theme.global.current.value.dark ? "light" : "dark");
+
+const cartCount = computed(() => {
+  return store.products.length;
+});
 </script>

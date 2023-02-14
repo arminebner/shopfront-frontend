@@ -14,7 +14,7 @@ import { onBeforeMount, ref } from "vue";
 import { useRoute } from "vue-router";
 import type Product from "@/types/product";
 import dataFetcher from "@/utils/dataFetcher";
-import { cartStore } from "@/stores/cartStore";
+import { useCartStore } from "@/stores/cartStore";
 
 onBeforeMount(() => {
   const params = useRoute().params;
@@ -22,7 +22,7 @@ onBeforeMount(() => {
   fetchProduct(id);
 });
 
-const cart = cartStore();
+const cart = useCartStore();
 
 const product = ref<Product>({
   name: "placeholder",
