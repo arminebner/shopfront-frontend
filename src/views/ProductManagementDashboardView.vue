@@ -41,9 +41,12 @@ const fetchProducts = async () => {
 };
 
 const submitForm = async (
+  id: string,
   name: string,
   shortDescription: string,
   description: string,
+  category: string,
+  quantity: string,
   price: string,
   image: string
 ) => {
@@ -51,9 +54,12 @@ const submitForm = async (
     await axios.post(
       "http://localhost:5000/api/product",
       {
+        id,
         name,
         short_description: shortDescription,
         description,
+        category,
+        quantity,
         price,
         image_url: image,
       },
@@ -87,6 +93,8 @@ const updateProduct = async (
   name: string,
   shortDescription: string,
   description: string,
+  category: string,
+  quantity: string,
   price: string,
   image: string
 ) => {
@@ -98,6 +106,8 @@ const updateProduct = async (
         name,
         short_description: shortDescription,
         description,
+        category,
+        quantity,
         price,
         image_url: image,
       },

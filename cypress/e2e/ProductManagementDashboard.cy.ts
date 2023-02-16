@@ -6,12 +6,15 @@ function createProduct(date: number) {
     name: `Productname: ${date}`,
     short_description: 'Lorem ipsum dolor sit amet, consetetur sadipsc',
     description: 'Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy',
-    price: '5',
+    category: 'Category2',
+    quantity: '3',
+    price: '5.99',
     image_url: 'images/testImage.jpg',
   }
 }
 
 describe('The product management dashboard', () => {
+  before(() => {})
   beforeEach(() => {
     cy.visit('/ProductManagementDashboard')
   })

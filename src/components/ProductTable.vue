@@ -5,102 +5,78 @@
         <th class="text-left">Name</th>
         <th class="text-left">Short description</th>
         <th class="text-left">Description</th>
+        <th class="text-left">Category</th>
         <th class="text-left">Image</th>
         <th class="text-left">Price</th>
+        <th class="text-left">Quantity</th>
         <th class="text-left">Actions</th>
       </tr>
     </thead>
     <tbody>
       <tr v-for="product in products" :key="product.id">
         <td>
-          <v-text-field
-            v-if="editingProductId === product.id"
-            v-model="name"
-            name="productName"
-            clearable
-            required
-          ></v-text-field>
-          <div v-else>{{ product.name }}</div>
+          {{ product.name }}
         </td>
         <td>
-          <v-text-field
-            v-if="editingProductId === product.id"
-            v-model="shortDescription"
-            name="shortDescription"
-            clearable
-            required
-          ></v-text-field>
-          <div v-else>
-            {{ product.short_description }}
-          </div>
+          {{ product.short_description }}
         </td>
         <td>
-          <v-text-field
-            v-if="editingProductId === product.id"
-            v-model="description"
-            name="description"
-            clearable
-            required
-          ></v-text-field>
-          <div v-else>
-            {{ product.description }}
-          </div>
+          {{ product.description }}
         </td>
         <td>
-          <v-file-input
-            v-if="editingProductId === product.id"
-            name="fileUpload"
-            accept="image/*"
-            label="File input"
-            @change="addFile"
-          ></v-file-input>
-          <v-img v-else width="100px" :src="product.image_url"></v-img>
+          {{ product.category }}
         </td>
         <td>
-          <v-text-field
-            v-if="editingProductId === product.id"
-            v-model="price"
-            name="productPrice"
-            clearable
-            required
-          ></v-text-field>
-          <div v-else>
-            {{ product.price }}
-          </div>
+          <v-img width="100px" :src="product.image_url"></v-img>
         </td>
         <td>
-          <div v-if="editingProductId === product.id">
-            <v-btn
-              id="save-button"
-              prepend-icon="mdi-check"
-              @click="validateForm"
-            ></v-btn>
-            <v-btn
-              prepend-icon="mdi-alpha-x-box"
-              @click="editingProductId = null"
-            ></v-btn>
-          </div>
-          <div v-else>
-            <v-btn
-              id="edit-button"
-              prepend-icon="mdi-file-edit"
-              @click="editProduct(product)"
-            ></v-btn>
-            <v-btn
-              id="delete-button"
-              prepend-icon="mdi-delete"
-              @click="emit('deleteProduct', product.id)"
-            ></v-btn>
-          </div>
+          {{ product.price }}
+        </td>
+        <td>
+          {{ product.quantity }}
+        </td>
+        <td>
+          <v-btn
+            id="edit-button"
+            prepend-icon="mdi-file-edit"
+            @click="editProduct(product)"
+          ></v-btn>
+          <v-btn
+            id="delete-button"
+            prepend-icon="mdi-delete"
+            @click="emit('deleteProduct', product.id)"
+          ></v-btn>
         </td>
       </tr>
     </tbody>
   </v-table>
+  <v-dialog v-model="popup.show">
+    <v-card>
+      <v-card-title>
+        Edit Product: {{ popup.payload.name }}
+        <v-spacer></v-spacer>
+      </v-card-title>
+      <v-card-text>
+        <product-form
+          :product="popup.payload"
+          @form-payload="updateProduct"
+        ></product-form>
+      </v-card-text>
+      <v-card-actions>
+        <v-spacer></v-spacer>
+        <v-btn icon color="grey darken-1" @click="popup.show = false">
+          <v-icon>mdi-close</v-icon>
+        </v-btn>
+      </v-card-actions>
+    </v-card>
+  </v-dialog>
 </template>
 
 <script setup lang="ts">
 import { ref, type PropType } from "vue";
 import type Product from "@/types/product";
+import ProductForm from "@/components/ProductForm.vue";
+
 
 defineProps({
   products: {
@@ -111,30 +87,46 @@ defineProps({
 
 const emit = defineEmits<{
   (e: "deleteProduct", id: string): void;
-  (e: "updateProduct", id: string, name: string, short_description: string, description: string, price: string, image: string): void;
+  (e: "updateProduct", id: string, name: string, short_description: string, description: string, category: string, quantity: string, price: string, image: string): void;
 }>();
 
-const valid = ref<boolean>(true);
-const id = ref<string>('')
-const name = ref<string>("");
-const shortDescription = ref<string>("");
-const description = ref<string>("");
-const image = ref<string>("");
-const price = ref<string>("");
-const editingProductId = ref<string | null>('')
-
-const validateForm = () => {
-  if (valid) {
-    emit("updateProduct", id.value, name.value, shortDescription.value, description.value, price.value, image.value);
-    editingProductId.value = null
+const popup = ref({
+  show: false,
+  payload: {
+    id: "",
+    name: "",
+    short_description: "",
+    description: "",
+    category: "",
+    quantity: "",
+    price: "",
+    image_url: ""
   }
-};
-
-function addFile(event: any) {
-  image.value = event.target.files[0];
-}
+})
 
 const editProduct = (product: Product) => {
-  editingProductId.value = product.id
+  popup.value.payload.id = product.id
+  popup.value.payload.name = product.name
+  popup.value.payload.short_description = product.short_description
+  popup.value.payload.description = product.description
+  popup.value.payload.category = product.category
+  popup.value.payload.quantity = product.quantity
+  popup.value.payload.price = product.price
+  popup.value.payload.image_url = product.image_url
+  popup.value.show = true
+}
+
+const updateProduct = (
+  id: string,
+  name: string,
+  shortDescription: string,
+  description: string,
+  category: string,
+  quantity: string,
+  price: string,
+  image: string) => {
+  emit('updateProduct',
+    id, name, shortDescription, description, category, quantity, price, image)
+  popup.value.show = false
 }
 </script>

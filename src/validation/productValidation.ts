@@ -48,6 +48,24 @@ const productRules = {
       return 'Price must only contain digits and a dot.'
     },
   ],
+  quantity: [
+    (value: string) => {
+      if (value) return true
+
+      return 'Quantity is requred.'
+    },
+    (value: string) => {
+      if (value?.length <= 4) return true
+
+      return 'Price must be less than 4 characters.'
+    },
+    (value: string) => {
+      const regex = /^\d+$/
+      if (regex.test(value)) return true
+
+      return 'Quantity must only contain digits.'
+    },
+  ],
 }
 
 export default productRules

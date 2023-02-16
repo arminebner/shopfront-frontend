@@ -3,6 +3,8 @@ export default interface Product {
   name: string
   short_description: string
   description: string
+  category: string
+  quantity: string
   price: string
   image_url: string
 }
