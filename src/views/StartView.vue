@@ -1,6 +1,9 @@
 <template>
   <v-container class="my-5">
-    <h1 class="mb-10 text-center">Welcome to Amandarando!</h1>
+    <h1 v-if="currentUser" class="mb-10 text-center">
+      Welcome {{ currentUser.first_name }}!
+    </h1>
+    <h1 v-else class="mb-10 text-center">Welcome!</h1>
     <p class="mb-10 text-center">
       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima ad nobis ab quae
       consequatur eius? Commodi repellendus iure id rem?
@@ -16,4 +19,28 @@
   </v-container>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+import type User from "@/types/user";
+import axios from "axios";
+import { defineComponent, onMounted, ref } from "vue";
+
+defineComponent({
+  name: "Start",
+  components: {},
+});
+
+const currentUser = ref<User>({
+  first_name: "",
+  last_name: "",
+  email: "",
+});
+
+onMounted(async () => {
+  try {
+    const { data } = await axios(`http://localhost:5000/api/users/user`, {
+      withCredentials: true,
+    });
+    currentUser.value = data;
+  } catch (_) { }
+});
+</script>

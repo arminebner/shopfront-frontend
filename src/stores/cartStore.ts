@@ -12,7 +12,6 @@ export const useCartStore = defineStore('cart', () => {
   }
 
   const deleteItem = (cartId: string) => {
-    console.log(cartId)
     products.value = products.value.filter(i => i.cartId !== cartId)
   }
 

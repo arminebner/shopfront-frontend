@@ -2,6 +2,7 @@ import { createApp } from 'vue'
 import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
+import './interceptors/axios.js'
 
 // Vuetify
 import 'vuetify/styles'
@@ -33,9 +34,11 @@ const pinia = createPinia()
 pinia.use(context => {
   const storeId = context.store.$id
 
-  context.store.$subscribe((mutation, state) => {
-    window.localStorage.setItem(storeId, JSON.stringify(state))
-  })
+  if (storeId === 'cart') {
+    context.store.$subscribe((mutation, state) => {
+      window.localStorage.setItem(storeId, JSON.stringify(state))
+    })
+  }
 
   const localData = window.localStorage.getItem(storeId)
   if (localData) {

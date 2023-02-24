@@ -7,6 +7,7 @@
         </template>
         <v-list-item-title v-text="link.title"> </v-list-item-title>
       </v-list-item>
+      <v-list-item v-if="savedToken" @click="logoutUser"> Logout </v-list-item>
     </v-list>
   </v-navigation-drawer>
   <v-app-bar flat class="bg-primary">
@@ -29,13 +30,21 @@ import { computed, defineComponent, ref } from "vue";
 import { useTheme } from "vuetify";
 import type NavLink from "@/types/navLink";
 import { useCartStore } from "@/stores/cartStore";
+import axios from "axios";
+import { useTokenStore } from "@/stores/tokenStore";
+import { storeToRefs } from "pinia";
+import { useRouter } from "vue-router";
 
 defineComponent({
   name: "BaseNavigation",
   components: {},
 });
 
-const store = useCartStore();
+const router = useRouter();
+
+const tokenStore = useTokenStore();
+const { savedToken } = storeToRefs(tokenStore);
+const cartStore = useCartStore();
 const theme = useTheme();
 const drawerOpen = ref(false);
 const navLinks = <NavLink[]>[
@@ -53,6 +62,21 @@ const toggleTheme = () =>
   (theme.global.name.value = theme.global.current.value.dark ? "light" : "dark");
 
 const cartCount = computed(() => {
-  return store.products.length;
+  return cartStore.products.length;
 });
+
+const logoutUser = async () => {
+  try {
+    const result = await axios("http://localhost:5000/api/users/logout", {
+      withCredentials: true,
+    });
+    if (result.status === 204) {
+      tokenStore.deleteToken();
+      axios.defaults.headers.common["Authorization"] = ``;
+    }
+    setTimeout(() => {
+      router.push("/login");
+    }, 1500);
+  } catch (_) { }
+};
 </script>
