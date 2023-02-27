@@ -1,3 +1,4 @@
+import { useTokenStore } from './../stores/tokenStore'
 import { createRouter, createWebHistory } from 'vue-router'
 import StartView from '../views/StartView.vue'
 import CartView from '../views/CartView.vue'
@@ -34,6 +35,9 @@ const router = createRouter({
       path: '/productManagementDashboard',
       name: 'Product Management Dashboard',
       component: ProductManagementDashboardView,
+      meta: {
+        requiresAuth: true,
+      },
     },
     {
       path: '/register',
@@ -46,6 +50,17 @@ const router = createRouter({
       component: LoginView,
     },
   ],
+})
+
+router.beforeEach((to, from, next) => {
+  const requiresAuth = to.matched.some(record => record.meta.requiresAuth)
+  const isAuthenticated = useTokenStore().savedToken
+
+  if (requiresAuth && !isAuthenticated) {
+    next('/login')
+  } else {
+    next()
+  }
 })
 
 export default router

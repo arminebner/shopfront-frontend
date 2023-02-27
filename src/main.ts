@@ -1,8 +1,8 @@
 import { createApp } from 'vue'
-import { createPinia } from 'pinia'
 import App from './App.vue'
 import router from './router'
 import './interceptors/axios.js'
+import globalStore from './stores/createPinia'
 
 // Vuetify
 import 'vuetify/styles'
@@ -30,24 +30,7 @@ const app = createApp(App)
 
 app.use(vuetify)
 
-const pinia = createPinia()
-pinia.use(context => {
-  const storeId = context.store.$id
-
-  if (storeId === 'cart') {
-    context.store.$subscribe((mutation, state) => {
-      window.localStorage.setItem(storeId, JSON.stringify(state))
-    })
-  }
-
-  const localData = window.localStorage.getItem(storeId)
-  if (localData) {
-    const localStore = JSON.parse(localData)
-    context.store.$patch(localStore)
-  }
-})
-
-app.use(pinia)
+app.use(globalStore())
 
 app.use(router)
 

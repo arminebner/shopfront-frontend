@@ -3,94 +3,53 @@
     <v-container>
       <v-row>
         <v-col cols="12" md="4">
-          <v-text-field
-            v-model="name"
-            :rules="ProductRules.name"
-            label="Name"
-            name="productName"
-            clearable
-            required
-          ></v-text-field>
+          <v-text-field v-model="name" :rules="ProductRules.name" label="Name" name="productName" clearable
+            required></v-text-field>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12" md="4">
-          <v-text-field
-            v-model="shortDescription"
-            :rules="ProductRules.shortDescription"
-            label="ShortDescription"
-            name="shortDescription"
-            clearable
-            required
-          ></v-text-field>
+          <v-text-field v-model="shortDescription" :rules="ProductRules.shortDescription" label="ShortDescription"
+            name="shortDescription" clearable required></v-text-field>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12" md="4">
-          <v-text-field
-            v-model="description"
-            :rules="ProductRules.description"
-            label="Description"
-            name="description"
-            clearable
-            required
-          ></v-text-field>
+          <v-text-field v-model="description" :rules="ProductRules.description" label="Description" name="description"
+            clearable required></v-text-field>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12" md="4">
-          <v-select
-            label="Category"
-            name="category"
-            :items="['Category1', 'Category2', 'Category3']"
-            v-model="category"
-          ></v-select>
+          <v-select label="Category" name="category" :items="['Category1', 'Category2', 'Category3']"
+            v-model="category"></v-select>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12" md="4">
-          <v-text-field
-            v-model="quantity"
-            :rules="ProductRules.quantity"
-            label="Quantity"
-            name="quantity"
-            clearable
-            required
-          ></v-text-field>
+          <v-text-field v-model="quantity" :rules="ProductRules.quantity" label="Quantity" name="quantity" clearable
+            required></v-text-field>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12" md="4">
-          <v-text-field
-            v-model="price"
-            :rules="ProductRules.price"
-            label="Price"
-            prefix="$"
-            name="productPrice"
-            clearable
-            required
-          ></v-text-field>
+          <v-text-field v-model="price" :rules="ProductRules.price" label="Price" prefix="$" name="productPrice" clearable
+            required></v-text-field>
         </v-col>
       </v-row>
       <v-row>
         <v-col cols="12" md="4">
-          <v-file-input
-            name="fileUpload"
-            accept="image/*"
-            label="File input"
-            @change="addFile"
-          ></v-file-input>
+          <v-file-input name="fileUpload" accept="image/*" label="File input" @change="addFile"></v-file-input>
         </v-col>
       </v-row>
     </v-container>
-    <v-btn prepend-icon="mdi-plus" :disabled="!isFormValid" @click="sanitizeForm"
-      >Add Product</v-btn
-    >
+    <v-btn prepend-icon="mdi-plus" :disabled="!isFormValid" @click="sanitizeForm">Add Product</v-btn>
   </v-form>
 </template>
 
 <script setup lang="ts">
 import type Product from "@/types/product";
+import customEncodeURIComponent from "@/utils/customUrlEncode";
 import { ref, type PropType } from "vue";
 import ProductRules from "../validation/productValidation";
 
@@ -126,9 +85,7 @@ const form: any = ref(null);
 const category = ref(props.product.category);
 const quantity = ref(props.product.quantity);
 
-function customEncodeURIComponent(str: string) {
-  return encodeURIComponent(str).replace(/%3A%20/g, ": ");
-}
+
 
 function addFile(event: any) {
   image.value = event.target.files[0];

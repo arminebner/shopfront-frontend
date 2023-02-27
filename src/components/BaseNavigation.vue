@@ -72,7 +72,7 @@ const logoutUser = async () => {
     });
     if (result.status === 204) {
       tokenStore.deleteToken();
-      axios.defaults.headers.common["Authorization"] = ``;
+      axios.defaults.headers.common["authorization"] = ``;
     }
     setTimeout(() => {
       router.push("/login");

@@ -39,7 +39,7 @@ const submitLogin = async () => {
       { withCredentials: true }
     );
     store.addToken(data.accessToken);
-    axios.defaults.headers.common["Authorization"] = `Bearer ${data.accessToken}`;
+    axios.defaults.headers.common["authorization"] = `Bearer ${data.accessToken}`;
     setTimeout(() => {
       router.push("/");
     }, 1500);
