@@ -1,11 +1,21 @@
 <template>
   <v-form>
     <v-text-field label="E-mail" v-model="email"></v-text-field>
-    <v-text-field v-model="password" :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'" :type="show ? 'text' : 'password'"
-      name="input-10-1" label="Password" hint="At least 8 characters" counter @click:append="show = !show"></v-text-field>
+    <v-text-field
+      v-model="password"
+      :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+      :type="show ? 'text' : 'password'"
+      name="input-10-1"
+      label="Password"
+      hint="At least 8 characters"
+      counter
+      @click:append="show = !show"
+    ></v-text-field>
     <v-btn @click="submitLogin">Login</v-btn>
   </v-form>
-  <router-link to="/register">Don't have an account yet? Click here to register</router-link>
+  <router-link to="/register"
+    >Don't have an account yet? Click here to register</router-link
+  >
   <v-alert v-if="errorMessage" type="error">{{ errorMessage }}</v-alert>
 </template>
 
@@ -14,6 +24,7 @@ import { useTokenStore } from "@/stores/tokenStore";
 import axios, { AxiosError } from "axios";
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
+import jwt_decode from "jwt-decode";
 
 defineComponent({
   name: "Login",
@@ -38,7 +49,9 @@ const submitLogin = async () => {
       },
       { withCredentials: true }
     );
-    store.addToken(data.accessToken);
+    try {
+      store.addToken(jwt_decode(data.accessToken));
+    } catch (_) {}
     axios.defaults.headers.common["authorization"] = `Bearer ${data.accessToken}`;
     setTimeout(() => {
       router.push("/");

@@ -1,13 +1,25 @@
 <template>
   <v-navigation-drawer v-model="drawerOpen" temporary>
     <v-list nav density="compact">
-      <v-list-item v-for="(link, i) in navLinks" :key="i" router :to="link.route" active-color="primary">
+      <v-list-item
+        v-for="(link, i) in navLinks"
+        :key="i"
+        router
+        :to="link.route"
+        active-color="primary"
+      >
         <template v-slot:prepend>
           <v-icon :icon="link.icon"></v-icon>
         </template>
         <v-list-item-title v-text="link.title"> </v-list-item-title>
       </v-list-item>
-      <v-list-item v-if="savedToken" @click="logoutUser"> Logout </v-list-item>
+      <v-list-item v-if="isSeller" to="/productManagementDashboard">
+        <template v-slot:prepend>
+          <v-icon icon="mdi-store-plus"></v-icon>
+        </template>
+        <v-list-item-title>Product Management Dashboard</v-list-item-title>
+      </v-list-item>
+      <v-list-item v-if="userName" @click="logoutUser"> Logout </v-list-item>
     </v-list>
   </v-navigation-drawer>
   <v-app-bar flat class="bg-primary">
@@ -15,9 +27,12 @@
     <v-app-bar-title>
       {{ $route.name }}
     </v-app-bar-title>
-    <v-btn :prepend-icon="
-      theme.global.name.value === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'
-    " @click="toggleTheme">
+    <v-btn
+      :prepend-icon="
+        theme.global.name.value === 'light' ? 'mdi-weather-sunny' : 'mdi-weather-night'
+      "
+      @click="toggleTheme"
+    >
     </v-btn>
     <router-link to="/cart">
       <v-btn prepend-icon="mdi-cart">{{ cartCount }}</v-btn>
@@ -43,7 +58,7 @@ defineComponent({
 const router = useRouter();
 
 const tokenStore = useTokenStore();
-const { savedToken } = storeToRefs(tokenStore);
+const { userName, isSeller } = storeToRefs(tokenStore);
 const cartStore = useCartStore();
 const theme = useTheme();
 const drawerOpen = ref(false);
@@ -51,11 +66,6 @@ const navLinks = <NavLink[]>[
   { title: "Start", route: "/", icon: "mdi-home" },
   { title: "Shop", route: "/shop", icon: "mdi-store" },
   { title: "Login", route: "/login", icon: "mdi-account" },
-  {
-    title: "Product Management",
-    route: "/productManagementDashboard",
-    icon: "mdi-store-plus",
-  },
 ];
 
 const toggleTheme = () =>
@@ -77,6 +87,6 @@ const logoutUser = async () => {
     setTimeout(() => {
       router.push("/login");
     }, 1500);
-  } catch (_) { }
+  } catch (_) {}
 };
 </script>
