@@ -1,96 +1,63 @@
 <template>
-  <v-form ref="form" v-model="isFormValid">
-    <v-container>
-      <v-row>
-        <v-col cols="12" md="4">
-          <v-text-field
-            v-model="name"
-            :rules="ProductRules.name"
-            label="Name"
-            name="productName"
-            clearable
-            required
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12" md="4">
-          <v-text-field
-            v-model="shortDescription"
-            :rules="ProductRules.shortDescription"
-            label="ShortDescription"
-            name="shortDescription"
-            clearable
-            required
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12" md="4">
-          <v-text-field
-            v-model="description"
-            :rules="ProductRules.description"
-            label="Description"
-            name="description"
-            clearable
-            required
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12" md="4">
-          <v-select
-            label="Category"
-            name="category"
-            :items="['Category1', 'Category2', 'Category3']"
-            v-model="category"
-          ></v-select>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12" md="4">
-          <v-text-field
-            v-model="quantity"
-            :rules="ProductRules.quantity"
-            label="Quantity"
-            name="quantity"
-            clearable
-            required
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12" md="4">
-          <v-text-field
-            v-model="price"
-            :rules="ProductRules.price"
-            label="Price"
-            prefix="$"
-            name="productPrice"
-            clearable
-            required
-          ></v-text-field>
-        </v-col>
-      </v-row>
-      <v-row>
-        <v-col cols="12" md="4">
-          <v-file-input
-            name="fileUpload"
-            accept="image/*"
-            label="File input"
-            @change="addFile"
-          ></v-file-input>
-        </v-col>
-      </v-row>
-    </v-container>
-    <v-btn prepend-icon="mdi-plus" :disabled="!isFormValid" @click="sanitizeForm"
-      >Add Product</v-btn
-    >
-  </v-form>
+  <v-container>
+    <v-row>
+      <v-col cols="12" md="8">
+        <v-form ref="form" v-model="isFormValid">
+          <v-row>
+            <v-col cols="12">
+              <v-text-field v-model="name" :rules="ProductRules.name" label="Name" name="productName" clearable
+                required></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-textarea v-model="shortDescription" :rules="ProductRules.shortDescription" label="ShortDescription"
+                name="shortDescription" clearable required></v-textarea>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-textarea v-model="description" :rules="ProductRules.description" label="Description" name="description"
+                clearable required></v-textarea>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-select label="Category" name="category" :items="['Category1', 'Category2', 'Category3']"
+                v-model="category"></v-select>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field v-model="quantity" :rules="ProductRules.quantity" label="Quantity" name="quantity" clearable
+                required></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-text-field v-model="price" :rules="ProductRules.price" label="Price" prefix="$" name="productPrice"
+                clearable required></v-text-field>
+            </v-col>
+          </v-row>
+          <v-row>
+            <v-col cols="12">
+              <v-btn prepend-icon="mdi-plus" :disabled="!isFormValid" @click="sanitizeForm">{{ buttonAction }}</v-btn>
+            </v-col>
+          </v-row>
+        </v-form>
+      </v-col>
+      <v-col cols="12" md="4">
+        <v-img v-if="preview" :src="preview" height="200px"></v-img>
+        <v-row>
+          <v-file-input name="fileUpload" accept="image/*" label="File input" @change="addFile"></v-file-input>
+        </v-row>
+      </v-col>
+    </v-row>
+  </v-container>
 </template>
 
 <script setup lang="ts">
-import { ref, type PropType } from "vue";
+import { ref, watchEffect, type PropType } from "vue";
 import customEncodeURIComponent from "@/utils/customUrlEncode";
 import ProductRules from "../validation/productValidation";
 import type Product from "@/types/product";
@@ -98,8 +65,12 @@ import type Product from "@/types/product";
 const props = defineProps({
   product: {
     type: Object as PropType<Product>,
-    default: "",
   },
+  buttonAction: {
+    type: String,
+    required: true,
+    default: "Default"
+  }
 });
 
 const emit = defineEmits<{
@@ -116,21 +87,21 @@ const emit = defineEmits<{
   ): void;
 }>();
 
-const isFormValid = ref<boolean>(false);
-const id = ref<string>(props.product.id)
-const name = ref<string>(props.product.name);
-const shortDescription = ref<string>(props.product.short_description);
-const description = ref<string>(props.product.description);
-const image = ref<string>(props.product.image_url);
-const price = ref<string>(props.product.price);
+const preview = ref(props.product ? props.product.image_url : "");
+const isFormValid = ref(false);
+const id = ref(props.product ? props.product.id : "")
+const name = ref(props.product ? props.product.name : "");
+const shortDescription = ref(props.product ? props.product.short_description : "");
+const description = ref(props.product ? props.product.description : "");
+const image = ref(props.product ? props.product.image_url : "");
+const price = ref(props.product ? props.product.price : "");
 const form: any = ref(null);
-const category = ref(props.product.category);
-const quantity = ref(props.product.quantity);
-
-
+const category = ref(props.product ? props.product.category : "");
+const quantity = ref(props.product ? props.product.quantity : "");
 
 function addFile(event: any) {
   image.value = event.target.files[0];
+  preview.value = URL.createObjectURL(event.target.files[0]);
 }
 
 const sanitizeForm = () => {

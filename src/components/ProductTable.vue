@@ -36,16 +36,8 @@
           {{ product.quantity }}
         </td>
         <td>
-          <v-btn
-            id="edit-button"
-            prepend-icon="mdi-file-edit"
-            @click="editProduct(product)"
-          ></v-btn>
-          <v-btn
-            id="delete-button"
-            prepend-icon="mdi-delete"
-            @click="emit('deleteProduct', product.id)"
-          ></v-btn>
+          <v-btn id="edit-button" prepend-icon="mdi-file-edit" @click="editProduct(product)"></v-btn>
+          <v-btn id="delete-button" prepend-icon="mdi-delete" @click="emit('deleteProduct', product.id)"></v-btn>
         </td>
       </tr>
     </tbody>
@@ -57,10 +49,8 @@
         <v-spacer></v-spacer>
       </v-card-title>
       <v-card-text>
-        <product-form
-          :product="popup.payload"
-          @form-payload="updateProduct"
-        ></product-form>
+        <product-form :product="popup.payload" button-action="Update Product"
+          @form-payload="updateProduct"></product-form>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>

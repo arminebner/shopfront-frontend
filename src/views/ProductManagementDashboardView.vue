@@ -1,16 +1,12 @@
 <template>
   <h1>Product Management Dashboard</h1>
   <h2>Add Product</h2>
-  <product-form @form-payload="submitForm"></product-form>
+  <product-form button-action="Add Product" @form-payload="submitForm"></product-form>
   <v-alert v-if="errorMessage" type="error"> {{ errorMessage }}</v-alert>
-  <h2>All Products</h2>
+  <h2>Your Products</h2>
   <loading-spinner v-if="isLoading"></loading-spinner>
-  <product-table
-    v-else
-    @delete-product="deleteProduct"
-    @update-product="updateProduct"
-    :products="products"
-  ></product-table>
+  <product-table v-else @delete-product="deleteProduct" @update-product="updateProduct"
+    :products="products"></product-table>
 </template>
 
 <script setup lang="ts">
@@ -29,6 +25,16 @@ const { userId } = storeToRefs(tokenStore);
 const products = ref<Product[]>([]);
 const isLoading = ref(false);
 const errorMessage = ref("");
+const product = ref({
+  id: "",
+  name: "",
+  short_description: "",
+  description: "",
+  category: "",
+  quantity: "",
+  price: "",
+  image_url: "",
+});
 
 onBeforeMount(() => {
   fetchProducts();

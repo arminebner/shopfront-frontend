@@ -1,8 +1,6 @@
 <template>
   <v-container class="my-5">
-    <h1 v-if="currentUser" class="mb-10 text-center">
-      Welcome {{ currentUser.first_name }}!
-    </h1>
+    <h1 v-if="currentUser" class="mb-10 text-center">Welcome {{ userName }}!</h1>
     <h1 v-else class="mb-10 text-center">Welcome!</h1>
     <p class="mb-10 text-center">
       Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima ad nobis ab quae
@@ -20,9 +18,10 @@
 </template>
 
 <script setup lang="ts">
+import { defineComponent, ref } from "vue";
+import { storeToRefs } from "pinia";
+import { useTokenStore } from "@/stores/tokenStore";
 import type User from "@/types/user";
-import axios from "axios";
-import { defineComponent, onMounted, ref } from "vue";
 
 defineComponent({
   name: "Start",
@@ -34,13 +33,6 @@ const currentUser = ref<User>({
   last_name: "",
   email: "",
 });
-
-onMounted(async () => {
-  try {
-    const { data } = await axios(`http://localhost:5000/api/users/user`, {
-      withCredentials: true,
-    });
-    currentUser.value = data;
-  } catch (_) { }
-});
+const tokenStore = useTokenStore();
+const { userName } = storeToRefs(tokenStore);
 </script>
