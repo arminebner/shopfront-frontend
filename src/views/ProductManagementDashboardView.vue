@@ -15,16 +15,20 @@
 
 <script setup lang="ts">
 import { onBeforeMount, ref } from "vue";
+import { storeToRefs } from "pinia";
+import { useTokenStore } from "@/stores/tokenStore";
 import axios, { AxiosError } from "axios";
 import dataFetcher from "@/utils/dataFetcher";
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import ProductForm from "@/components/ProductForm.vue";
 import ProductTable from "@/components/ProductTable.vue";
-import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import type Product from "@/types/product";
 
+const tokenStore = useTokenStore();
+const { userId } = storeToRefs(tokenStore);
 const products = ref<Product[]>([]);
 const isLoading = ref(false);
-const errorMessage = ref<string>("");
+const errorMessage = ref("");
 
 onBeforeMount(() => {
   fetchProducts();
@@ -33,7 +37,7 @@ onBeforeMount(() => {
 const fetchProducts = async () => {
   try {
     isLoading.value = true;
-    products.value = await dataFetcher("products");
+    products.value = await dataFetcher(`products/user/${userId.value}`);
   } catch (error) {
     console.log(error);
   }
@@ -62,6 +66,7 @@ const submitForm = async (
         quantity,
         price,
         image_url: image,
+        user_id: userId.value,
       },
       {
         headers: {
@@ -110,6 +115,7 @@ const updateProduct = async (
         quantity,
         price,
         image_url: image,
+        user_id: userId.value,
       },
       {
         headers: {

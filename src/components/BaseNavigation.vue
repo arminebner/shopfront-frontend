@@ -42,13 +42,13 @@
 
 <script setup lang="ts">
 import { computed, defineComponent, ref } from "vue";
-import { useTheme } from "vuetify";
-import type NavLink from "@/types/navLink";
-import { useCartStore } from "@/stores/cartStore";
-import axios from "axios";
-import { useTokenStore } from "@/stores/tokenStore";
 import { storeToRefs } from "pinia";
+import { useCartStore } from "@/stores/cartStore";
 import { useRouter } from "vue-router";
+import { useTheme } from "vuetify";
+import { useTokenStore } from "@/stores/tokenStore";
+import axios from "axios";
+import type NavLink from "@/types/navLink";
 
 defineComponent({
   name: "BaseNavigation",
