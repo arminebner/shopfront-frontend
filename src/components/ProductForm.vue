@@ -57,7 +57,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watchEffect, type PropType } from "vue";
+import { ref, type PropType } from "vue";
 import customEncodeURIComponent from "@/utils/customUrlEncode";
 import ProductRules from "../validation/productValidation";
 import type Product from "@/types/product";

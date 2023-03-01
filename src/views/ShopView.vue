@@ -12,6 +12,8 @@
       accusamus sapiente laborum quis illo sit recusandae ipsam quam facere consequuntur
       eos saepe, assumenda soluta? Enim, alias vero?
     </p>
+    <v-select @update:model-value="fetchProducts($event)" label="Category" name="category"
+      :items="['All', 'Category1', 'Category2', 'Category3']" v-model="category"></v-select>
     <loading-spinner v-if="isLoading"></loading-spinner>
     <card-grid v-else :products="products"></card-grid>
   </v-container>
@@ -25,16 +27,17 @@ import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import type Product from "@/types/product";
 
 onBeforeMount(() => {
-  fetchProducts();
+  fetchProducts("All");
 });
 
 const products = ref<Product[]>([]);
 const isLoading = ref(false);
+const category = ref("All");
 
-const fetchProducts = async () => {
+const fetchProducts = async (selectedValue: any) => {
   try {
     isLoading.value = true;
-    products.value = await dataFetcher("products");
+    products.value = await dataFetcher(`products/category/${selectedValue}`);
   } catch (error) {
     console.log(error);
   }
