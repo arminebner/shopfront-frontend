@@ -1,21 +1,59 @@
 <template>
-  Registration
-  <v-form v-model="isFormValid">
-    <v-text-field v-model="firstName" :rules="userRules.name" label="First Name" name="firstName" clearable
-      required></v-text-field>
-    <v-text-field v-model="lastName" :rules="userRules.name" label="Last Name" name="lastName" clearable
-      required></v-text-field>
-    <v-text-field label="E-mail" v-model="email" :rules="userRules.email"></v-text-field>
-    <v-text-field v-model="password" :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'" :type="show ? 'text' : 'password'"
-      name="password" label="Password" hint="At least 8 characters" counter @click:append="show = !show"></v-text-field>
-    <v-text-field v-model="password2" :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'" :type="show ? 'text' : 'password'"
-      name="password2" label="Compare Password" hint="Please repeat your password again here" counter
-      @click:append="show = !show"></v-text-field>
-    <v-checkbox label="I want to register as a seller!" v-model="isSeller"></v-checkbox>
-    <v-btn :disabled="!isFormValid" @click="submitRegistration">Register</v-btn>
-  </v-form>
-  <v-alert v-if="result" type="success">Registration sent successfully!</v-alert>
-  <v-alert v-if="!comparePasswords" type="error">Passwords do not match!</v-alert>
+  <v-app>
+    <v-container>
+      <h1>Register</h1>
+      <v-form v-model="isFormValid">
+        <v-text-field
+          v-model="firstName"
+          :rules="userRules.name"
+          label="First Name"
+          name="firstName"
+          clearable
+          required
+        ></v-text-field>
+        <v-text-field
+          v-model="lastName"
+          :rules="userRules.name"
+          label="Last Name"
+          name="lastName"
+          clearable
+          required
+        ></v-text-field>
+        <v-text-field
+          label="E-mail"
+          v-model="email"
+          :rules="userRules.email"
+        ></v-text-field>
+        <v-text-field
+          v-model="password"
+          :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+          :type="show ? 'text' : 'password'"
+          name="password"
+          label="Password"
+          hint="At least 8 characters"
+          counter
+          @click:append="show = !show"
+        ></v-text-field>
+        <v-text-field
+          v-model="password2"
+          :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+          :type="show ? 'text' : 'password'"
+          name="password2"
+          label="Compare Password"
+          hint="Please repeat your password again here"
+          counter
+          @click:append="show = !show"
+        ></v-text-field>
+        <v-checkbox
+          label="I want to register as a seller!"
+          v-model="isSeller"
+        ></v-checkbox>
+        <v-btn :disabled="!isFormValid" @click="submitRegistration">Register</v-btn>
+      </v-form>
+      <v-alert v-if="result" type="success">Registration sent successfully!</v-alert>
+      <v-alert v-if="!comparePasswords" type="error">Passwords do not match!</v-alert>
+    </v-container>
+  </v-app>
 </template>
 <script setup lang="ts">
 import { computed, defineComponent, ref } from "vue";
@@ -69,3 +107,12 @@ const submitRegistration = async () => {
   }
 };
 </script>
+<style scoped>
+h1 {
+  font-size: 48px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 20px;
+}
+</style>

@@ -5,8 +5,12 @@
   <v-alert v-if="errorMessage" type="error"> {{ errorMessage }}</v-alert>
   <h2>Your Products</h2>
   <loading-spinner v-if="isLoading"></loading-spinner>
-  <product-table v-else @delete-product="deleteProduct" @update-product="updateProduct"
-    :products="products"></product-table>
+  <product-table
+    v-else
+    @delete-product="deleteProduct"
+    @update-product="updateProduct"
+    :products="products"
+  ></product-table>
 </template>
 
 <script setup lang="ts">
@@ -43,7 +47,10 @@ onBeforeMount(() => {
 const fetchProducts = async () => {
   try {
     isLoading.value = true;
-    products.value = await dataFetcher(`products/user/${userId.value}`);
+    const result = await axios.post(`http://localhost:5000/api/products/filtered`, {
+      userId: userId.value,
+    });
+    products.value = result.data;
   } catch (error) {
     console.log(error);
   }

@@ -1,52 +1,60 @@
 <template>
-  <v-table fixed-header height="300px">
-    <thead>
-      <tr>
-        <th class="text-left">Quantity</th>
-        <th class="text-left">Image</th>
-        <th class="text-left">Name</th>
-        <th class="text-left">Short description</th>
-        <th class="text-left">Price</th>
-        <th class="text-left">Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr v-for="product in products" :key="product.id">
-        <td>
-          <v-row>
-            {{ product.quantity }}
-            <div>
-              <v-btn prepend-icon="mdi-menu-up" @click="addItemInstance(product)"></v-btn>
-              <v-btn prepend-icon="mdi-menu-down" @click="removeFromCart(product.cartId)"></v-btn>
+  <v-table>
+    <template v-slot:default>
+      <thead>
+        <tr>
+          <th class="text-left caption" scope="col">Quantity</th>
+          <th class="text-left caption" scope="col">Name</th>
+          <th class="text-left caption" scope="col">Description</th>
+          <th class="text-left caption" scope="col">Price</th>
+          <th class="text-left caption" scope="col">Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr v-for="product in products" :key="product.id">
+          <td>
+            <v-row align="center" justify="space-between">
+              <div>{{ product.quantity }}</div>
+              <div>
+                <v-btn icon @click="addItemInstance(product)">
+                  <v-icon>mdi-menu-up</v-icon>
+                </v-btn>
+                <v-btn icon @click="removeFromCart(product.cartId)">
+                  <v-icon>mdi-menu-down</v-icon>
+                </v-btn>
+              </div>
+            </v-row>
+          </td>
+          <td>
+            <div class="subtitle-1">{{ product.name }}</div>
+          </td>
+          <td>
+            <div class="caption">{{ product.short_description }}</div>
+          </td>
+          <td>
+            <div class="subtitle-1">
+              {{ (parseFloat(product.price) * product.quantity).toFixed(2) }}
             </div>
-          </v-row>
-        </td>
-        <td>
-          <v-img width="100px" :src="product.image_url"></v-img>
-        </td>
-        <td>
-          {{ product.name }}
-        </td>
-        <td>
-          {{ product.short_description }}
-        </td>
-        <td>
-          {{ (parseFloat(product.price) * product.quantity).toFixed(2) }}
-        </td>
-        <td>
-          <v-btn id="delete-button" prepend-icon="mdi-delete" @click="removeFromCart(product.cartId)"></v-btn>
-        </td>
-      </tr>
-      <tr v-if="products.length > 0">
-        <td></td>
-        <td></td>
-        <td></td>
-        <td></td>
-        <td>Total: {{ totalAmount }}</td>
-        <v-btn @click="startOrderingProcess">Buy now!</v-btn>
-        <td></td>
-      </tr>
-    </tbody>
+          </td>
+          <td>
+            <v-btn icon @click="removeFromCart(product.cartId)">
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
+          </td>
+        </tr>
+        <tr v-if="products.length > 0">
+          <td></td>
+          <td></td>
+          <td></td>
+          <td>
+            <div class="subtitle-1 font-weight-bold">Total: {{ totalAmount }}</div>
+          </td>
+          <td>
+            <v-btn block @click="startOrderingProcess">Buy now!</v-btn>
+          </td>
+        </tr>
+      </tbody>
+    </template>
   </v-table>
 </template>
 
@@ -85,3 +93,15 @@ const addItemInstance = (cartItem: CartItem) => {
   emit("addItemInstance", cartItem)
 }
 </script>
+
+<style scoped>
+@media only screen and (max-width: 600px) {
+  .caption {
+    font-size: 12px !important;
+  }
+
+  .subtitle-1 {
+    font-size: 14px !important;
+  }
+}
+</style>

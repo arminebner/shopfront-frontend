@@ -1,7 +1,18 @@
 <template>
-  <h1>Your Shoppingcart</h1>
-  <shopping-cart-table :products="cartItems" @remove-from-cart="removeProductCartStore"
-    @add-item-instance="addItemInstance"></shopping-cart-table>
+  <v-app>
+    <v-container fluid>
+      <v-row justify="center">
+        <v-col cols="12" sm="10" md="8" lg="6">
+          <h1 class="text-center">Your Shopping Cart</h1>
+          <shopping-cart-table
+            :products="cartItems"
+            @remove-from-cart="removeProductCartStore"
+            @add-item-instance="addItemInstance"
+          ></shopping-cart-table>
+        </v-col>
+      </v-row>
+    </v-container>
+  </v-app>
 </template>
 
 <script setup lang="ts">
@@ -23,5 +34,11 @@ const addItemInstance = (cartItem: CartItem) => {
 </script>
 
 <style scoped>
-
+h1 {
+  font-size: 48px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 20px;
+}
 </style>

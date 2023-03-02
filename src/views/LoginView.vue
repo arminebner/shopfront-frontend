@@ -1,22 +1,27 @@
 <template>
-  <v-form>
-    <v-text-field label="E-mail" v-model="email"></v-text-field>
-    <v-text-field
-      v-model="password"
-      :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-      :type="show ? 'text' : 'password'"
-      name="input-10-1"
-      label="Password"
-      hint="At least 8 characters"
-      counter
-      @click:append="show = !show"
-    ></v-text-field>
-    <v-btn @click="submitLogin">Login</v-btn>
-  </v-form>
-  <router-link to="/register"
-    >Don't have an account yet? Click here to register</router-link
-  >
-  <v-alert v-if="errorMessage" type="error">{{ errorMessage }}</v-alert>
+  <v-app>
+    <v-container>
+      <h1>Login</h1>
+      <v-form v-model="isFormValid">
+        <v-text-field label="E-mail" v-model="email"></v-text-field>
+        <v-text-field
+          v-model="password"
+          :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
+          :type="show ? 'text' : 'password'"
+          name="input-10-1"
+          label="Password"
+          hint="At least 8 characters"
+          counter
+          @click:append="show = !show"
+        ></v-text-field>
+        <v-btn :disabled="!isFormValid" @click="submitLogin">Login</v-btn>
+      </v-form>
+      <router-link to="/register"
+        >Don't have an account yet? Click here to register</router-link
+      >
+      <v-alert v-if="errorMessage" type="error">{{ errorMessage }}</v-alert>
+    </v-container>
+  </v-app>
 </template>
 
 <script setup lang="ts">
@@ -38,6 +43,7 @@ const email = ref("");
 const password = ref("");
 const show = ref(false);
 const errorMessage = ref("");
+const isFormValid = ref(false);
 
 const submitLogin = async () => {
   try {
@@ -63,3 +69,13 @@ const submitLogin = async () => {
   }
 };
 </script>
+
+<style scoped>
+h1 {
+  font-size: 48px;
+  font-weight: bold;
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 20px;
+}
+</style>
