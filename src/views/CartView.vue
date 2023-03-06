@@ -1,18 +1,12 @@
 <template>
-  <v-app>
-    <v-container fluid>
-      <v-row justify="center">
-        <v-col cols="12" sm="10" md="8" lg="6">
-          <h1 class="text-center">Your Shopping Cart</h1>
-          <shopping-cart-table
-            :products="cartItems"
-            @remove-from-cart="removeProductCartStore"
-            @add-item-instance="addItemInstance"
-          ></shopping-cart-table>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-app>
+  <div class="container">
+    <h1 class="text-center">Your Shopping Cart</h1>
+    <shopping-cart-table
+      :products="cartItems"
+      @remove-from-cart="removeProductCartStore"
+      @add-item-instance="addItemInstance"
+    ></shopping-cart-table>
+  </div>
 </template>
 
 <script setup lang="ts">

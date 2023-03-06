@@ -1,5 +1,5 @@
 <template>
-  <v-table fixed-header height="300px">
+  <table fixed-header height="300px">
     <thead>
       <tr>
         <th class="text-left">Name</th>
@@ -27,7 +27,7 @@
           {{ product.category }}
         </td>
         <td>
-          <v-img width="100px" :src="product.image_url"></v-img>
+          <img :src="product.image_url" />
         </td>
         <td>
           {{ product.price }}
@@ -36,48 +36,54 @@
           {{ product.quantity }}
         </td>
         <td>
-          <v-btn id="edit-button" prepend-icon="mdi-file-edit" @click="editProduct(product)"></v-btn>
-          <v-btn id="delete-button" prepend-icon="mdi-delete" @click="emit('deleteProduct', product.id)"></v-btn>
+          <v-btn id="edit-button" @click="editProduct(product)">edit</v-btn>
+          <v-btn id="delete-button" @click="deleteProduct(product.id)">delete</v-btn>
         </td>
       </tr>
     </tbody>
-  </v-table>
-  <v-dialog v-model="popup.show">
-    <v-card>
-      <v-card-title>
+  </table>
+  <div v-if="popup.show">
+    <div class="overlay" @click="popup.show = false"></div>
+    <div class="dialog">
+      <div class="header">
         Edit Product: {{ popup.payload.name }}
-        <v-spacer></v-spacer>
-      </v-card-title>
-      <v-card-text>
-        <product-form :product="popup.payload" button-action="Update Product"
-          @form-payload="updateProduct"></product-form>
-      </v-card-text>
-      <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn icon color="grey darken-1" @click="popup.show = false">
-          <v-icon>mdi-close</v-icon>
-        </v-btn>
-      </v-card-actions>
-    </v-card>
-  </v-dialog>
+        <button class="close" @click="popup.show = false">X</button>
+      </div>
+      <div class="content">
+        <product-form
+          :product="popup.payload"
+          form-action="put"
+          :user-id="props.userId"
+          button-action="Update Product"
+          @product-submitted="updateProduct"
+        ></product-form>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
 import { ref, type PropType } from "vue";
 import type Product from "@/types/product";
 import ProductForm from "@/components/ProductForm.vue";
+import axios, { AxiosError } from "axios";
 
-
-defineProps({
+const props = defineProps({
   products: {
     type: Array as PropType<Product[]>,
     required: true,
   },
+  userId: {
+    type: String,
+    required: true,
+    default: "Default"
+  },
 });
 
+const errorMessage = ref("");
+
 const emit = defineEmits<{
-  (e: "deleteProduct", id: string): void;
-  (e: "updateProduct", id: string, name: string, short_description: string, description: string, category: string, quantity: string, price: string, image: string): void;
+  (e: "updateProduct"): void
 }>();
 
 const popup = ref({
@@ -106,17 +112,63 @@ const editProduct = (product: Product) => {
   popup.value.show = true
 }
 
-const updateProduct = (
-  id: string,
-  name: string,
-  shortDescription: string,
-  description: string,
-  category: string,
-  quantity: string,
-  price: string,
-  image: string) => {
-  emit('updateProduct',
-    id, name, shortDescription, description, category, quantity, price, image)
+const updateProduct = () => {
+  emit('updateProduct')
   popup.value.show = false
 }
+
+const deleteProduct = async (id: string) => {
+  try {
+    await axios.delete(`http://localhost:5000/api/product/${id}`);
+    emit('updateProduct')
+  } catch (e) {
+    const error = e as AxiosError;
+    const message = error.response?.data as string;
+    errorMessage.value = message;
+  }
+};
 </script>
+<style>
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+}
+
+.dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: #fff;
+  width: 400px;
+  max-width: 90%;
+  z-index: 1000;
+  border-radius: 5px;
+}
+
+.header {
+  background-color: #f5f5f5;
+  padding: 10px;
+  font-size: 1.2em;
+  font-weight: bold;
+}
+
+.content {
+  padding: 10px;
+}
+
+.close {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  border: none;
+  background-color: transparent;
+  font-size: 1.2em;
+  cursor: pointer;
+}
+</style>

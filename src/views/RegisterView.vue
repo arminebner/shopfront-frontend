@@ -1,66 +1,30 @@
 <template>
-  <v-app>
-    <v-container>
-      <h1>Register</h1>
-      <v-form v-model="isFormValid">
-        <v-text-field
-          v-model="firstName"
-          :rules="userRules.name"
-          label="First Name"
-          name="firstName"
-          clearable
-          required
-        ></v-text-field>
-        <v-text-field
-          v-model="lastName"
-          :rules="userRules.name"
-          label="Last Name"
-          name="lastName"
-          clearable
-          required
-        ></v-text-field>
-        <v-text-field
-          label="E-mail"
-          v-model="email"
-          :rules="userRules.email"
-        ></v-text-field>
-        <v-text-field
-          v-model="password"
-          :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-          :type="show ? 'text' : 'password'"
-          name="password"
-          label="Password"
-          hint="At least 8 characters"
-          counter
-          @click:append="show = !show"
-        ></v-text-field>
-        <v-text-field
-          v-model="password2"
-          :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-          :type="show ? 'text' : 'password'"
-          name="password2"
-          label="Compare Password"
-          hint="Please repeat your password again here"
-          counter
-          @click:append="show = !show"
-        ></v-text-field>
-        <v-checkbox
-          label="I want to register as a seller!"
-          v-model="isSeller"
-        ></v-checkbox>
-        <v-btn :disabled="!isFormValid" @click="submitRegistration">Register</v-btn>
-      </v-form>
-      <v-alert v-if="result" type="success">Registration sent successfully!</v-alert>
-      <v-alert v-if="!comparePasswords" type="error">Passwords do not match!</v-alert>
-    </v-container>
-  </v-app>
+  <div class="container">
+    <h1>Registration</h1>
+    <form-kit type="form" @submit="submitRegistration">
+      <form-kit type="text" label="First Name" name="firstName" validation="required" />
+      <form-kit type="text" label="Last Name" name="lastName" validation="required" />
+      <form-kit type="email" label="Email" name="email" validation="required|email" />
+      <form-kit
+        type="password"
+        label="Password"
+        name="password"
+        validation="required|length:8"
+      />
+      <form-kit
+        type="password"
+        label="Confirm Password"
+        name="password_confirm"
+        validation="required|confirm"
+      />
+      <form-kit type="checkbox" label="Register as seller?" name="isSeller" />
+    </form-kit>
+  </div>
 </template>
 <script setup lang="ts">
-import { computed, defineComponent, ref } from "vue";
+import { defineComponent, ref } from "vue";
 import axios, { AxiosError } from "axios";
 import { useRouter } from "vue-router";
-import userRules from "@/validation/userValidation";
-import customEncodeURIComponent from "@/utils/customUrlEncode";
 
 defineComponent({
   name: "Register",
@@ -68,41 +32,25 @@ defineComponent({
 });
 
 const router = useRouter();
-
-const firstName = ref("");
-const lastName = ref("");
-const email = ref("");
-const password = ref("");
-const password2 = ref("");
-const show = ref(false);
-const result = ref("");
 const errorMessage = ref("");
-const isFormValid = ref(false);
-const isSeller = ref(false);
 
-const comparePasswords = computed(() => {
-  return password.value === password2.value;
-});
-
-const submitRegistration = async () => {
-  if (isFormValid.value) {
-    firstName.value = customEncodeURIComponent(firstName.value);
-    lastName.value = customEncodeURIComponent(lastName.value);
-  }
+const submitRegistration = async (data: any) => {
   try {
-    result.value = await axios.post("http://localhost:5000/api/users/register", {
-      firstName: firstName.value,
-      lastName: lastName.value,
-      email: email.value,
-      password: password.value,
-      seller: isSeller.value,
+    await axios.post("http://localhost:5000/api/users/register", {
+      firstName: data.firstName,
+      lastName: data.lastName,
+      email: data.email,
+      password: data.password,
+      seller: data.isSeller,
     });
+    // TODO add toast message
     setTimeout(() => {
       router.push("/login");
     }, 1500);
   } catch (e) {
     const error = e as AxiosError;
     const message = error.response?.data as string;
+    // TODO add toast message
     errorMessage.value = message;
   }
 };

@@ -1,61 +1,59 @@
 <template>
-  <v-table>
-    <template v-slot:default>
-      <thead>
-        <tr>
-          <th class="text-left caption" scope="col">Quantity</th>
-          <th class="text-left caption" scope="col">Name</th>
-          <th class="text-left caption" scope="col">Description</th>
-          <th class="text-left caption" scope="col">Price</th>
-          <th class="text-left caption" scope="col">Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="product in products" :key="product.id">
-          <td>
-            <v-row align="center" justify="space-between">
-              <div>{{ product.quantity }}</div>
-              <div>
-                <v-btn icon @click="addItemInstance(product)">
-                  <v-icon>mdi-menu-up</v-icon>
-                </v-btn>
-                <v-btn icon @click="removeFromCart(product.cartId)">
-                  <v-icon>mdi-menu-down</v-icon>
-                </v-btn>
-              </div>
-            </v-row>
-          </td>
-          <td>
-            <div class="subtitle-1">{{ product.name }}</div>
-          </td>
-          <td>
-            <div class="caption">{{ product.short_description }}</div>
-          </td>
-          <td>
-            <div class="subtitle-1">
-              {{ (parseFloat(product.price) * product.quantity).toFixed(2) }}
+  <table>
+    <thead>
+      <tr>
+        <th class="text-left caption" scope="col">Quantity</th>
+        <th class="text-left caption" scope="col">Name</th>
+        <th class="text-left caption" scope="col">Description</th>
+        <th class="text-left caption" scope="col">Price</th>
+        <th class="text-left caption" scope="col">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="product in products" :key="product.id">
+        <td>
+          <v-row align="center" justify="space-between">
+            <div>{{ product.quantity }}</div>
+            <div>
+              <v-btn icon @click="addItemInstance(product)">
+                <v-icon>mdi-menu-up</v-icon>
+              </v-btn>
+              <v-btn icon @click="removeFromCart(product.cartId)">
+                <v-icon>mdi-menu-down</v-icon>
+              </v-btn>
             </div>
-          </td>
-          <td>
-            <v-btn icon @click="removeFromCart(product.cartId)">
-              <v-icon>mdi-delete</v-icon>
-            </v-btn>
-          </td>
-        </tr>
-        <tr v-if="products.length > 0">
-          <td></td>
-          <td></td>
-          <td></td>
-          <td>
-            <div class="subtitle-1 font-weight-bold">Total: {{ totalAmount }}</div>
-          </td>
-          <td>
-            <v-btn block @click="startOrderingProcess">Buy now!</v-btn>
-          </td>
-        </tr>
-      </tbody>
-    </template>
-  </v-table>
+          </v-row>
+        </td>
+        <td>
+          <div class="subtitle-1">{{ product.name }}</div>
+        </td>
+        <td>
+          <div class="caption">{{ product.short_description }}</div>
+        </td>
+        <td>
+          <div class="subtitle-1">
+            {{ (parseFloat(product.price) * product.quantity).toFixed(2) }}
+          </div>
+        </td>
+        <td>
+          <v-btn icon @click="removeFromCart(product.cartId)">
+            <v-icon>mdi-delete</v-icon>
+          </v-btn>
+        </td>
+      </tr>
+      <tr v-if="products.length > 0">
+        <td></td>
+        <td></td>
+        <td></td>
+        <td>
+          <div class="subtitle-1 font-weight-bold">Total: {{ totalAmount }}</div>
+        </td>
+        <td>
+          <v-btn block @click="startOrderingProcess">Buy now!</v-btn>
+        </td>
+      </tr>
+    </tbody>
+  </table>
 </template>
 
 <script setup lang="ts">

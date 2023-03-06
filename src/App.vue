@@ -1,10 +1,6 @@
 <template>
-  <v-app>
-    <base-navigation />
-    <v-main>
-      <router-view></router-view>
-    </v-main>
-  </v-app>
+  <base-navigation />
+  <router-view></router-view>
 </template>
 
 <script setup lang="ts">

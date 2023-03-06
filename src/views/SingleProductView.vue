@@ -1,20 +1,12 @@
 <template>
-  <v-app>
-    <v-container>
-      <v-row>
-        <v-col cols="12" md="6">
-          <img :src="product.image_url" :alt="product.name" style="max-width: 100%" />
-        </v-col>
-        <v-col cols="12" md="6">
-          <h1>{{ product.name }}</h1>
-          <p>{{ product.short_description }}</p>
-          <p>{{ product.description }}</p>
-          <p>Price: {{ product.price }}</p>
-          <v-btn color="primary" @click="addToCart(product)">Add to Cart</v-btn>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-app>
+  <div class="container">
+    <img :src="product.image_url" :alt="product.name" style="max-width: 100%" />
+    <h1>{{ product.name }}</h1>
+    <p>{{ product.short_description }}</p>
+    <p>{{ product.description }}</p>
+    <p>Price: {{ product.price }}</p>
+    <button @click="addToCart(product)">Add to Cart</button>
+  </div>
 </template>
 
 <script setup lang="ts">

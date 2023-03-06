@@ -1,19 +1,15 @@
 <template>
-  <v-app>
-    <v-container>
-      <v-row justify="center">
-        <v-col cols="12" md="6">
-          <h1>Welcome to our Webshop</h1>
-          <h1 v-if="currentUser" class="mb-10 text-center">{{ userName }}</h1>
-          <p>
-            We offer a wide variety of products at great prices. Check out our selection
-            below!
-          </p>
-          <router-link :to="`/shop`">Shop Now</router-link>
-        </v-col>
-      </v-row>
-    </v-container>
-  </v-app>
+  <div class="container">
+    <div>
+      <h1>Welcome to our Webshop</h1>
+      <h1 v-if="currentUser">{{ userName }}</h1>
+      <p>
+        We offer a wide variety of products at great prices. Check out our selection
+        below!
+      </p>
+      <router-link :to="`/shop`">Shop Now</router-link>
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts">
@@ -36,17 +32,17 @@ const tokenStore = useTokenStore();
 const { userName } = storeToRefs(tokenStore);
 </script>
 <style scoped>
-h1 {
-  font-size: 48px;
-  font-weight: bold;
-  text-align: center;
-  margin-top: 50px;
-  margin-bottom: 20px;
+body {
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
 }
 
-p {
-  font-size: 24px;
-  text-align: center;
-  margin-bottom: 50px;
+.container {
+  display: flex;
+  justify-content: center;
+  height: 100vh;
+  margin: 20px;
+  max-width: 1200px;
 }
 </style>

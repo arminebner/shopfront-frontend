@@ -1,27 +1,12 @@
 <template>
-  <v-app>
-    <v-container>
-      <h1>Login</h1>
-      <v-form v-model="isFormValid">
-        <v-text-field label="E-mail" v-model="email"></v-text-field>
-        <v-text-field
-          v-model="password"
-          :append-icon="show ? 'mdi-eye' : 'mdi-eye-off'"
-          :type="show ? 'text' : 'password'"
-          name="input-10-1"
-          label="Password"
-          hint="At least 8 characters"
-          counter
-          @click:append="show = !show"
-        ></v-text-field>
-        <v-btn :disabled="!isFormValid" @click="submitLogin">Login</v-btn>
-      </v-form>
-      <router-link to="/register"
-        >Don't have an account yet? Click here to register</router-link
-      >
-      <v-alert v-if="errorMessage" type="error">{{ errorMessage }}</v-alert>
-    </v-container>
-  </v-app>
+  <div class="container">
+    <h1>Login</h1>
+    <form-kit type="form" @submit="submitLogin">
+      <form-kit type="email" label="Email" name="email" validation="required|email" />
+      <form-kit type="password" label="Password" name="password" validation="required|length:8" />
+    </form-kit>
+  </div>
+  <router-link to="/register">Don't have an account yet? Click here to register</router-link>
 </template>
 
 <script setup lang="ts">
@@ -38,27 +23,22 @@ defineComponent({
 
 const router = useRouter();
 const store = useTokenStore();
-
-const email = ref("");
-const password = ref("");
-const show = ref(false);
 const errorMessage = ref("");
-const isFormValid = ref(false);
 
-const submitLogin = async () => {
+const submitLogin = async (data: any) => {
   try {
-    const { data } = await axios.post(
+    const result = await axios.post(
       "http://localhost:5000/api/users/access",
       {
-        email: email.value,
-        password: password.value,
+        email: data.email,
+        password: data.password,
       },
       { withCredentials: true }
     );
     try {
-      store.addToken(jwt_decode(data.accessToken));
-    } catch (_) {}
-    axios.defaults.headers.common["authorization"] = `Bearer ${data.accessToken}`;
+      store.addToken(jwt_decode(result.data.accessToken));
+    } catch (_) { }
+    axios.defaults.headers.common["authorization"] = `Bearer ${result.data.accessToken}`;
     setTimeout(() => {
       router.push("/");
     }, 1500);

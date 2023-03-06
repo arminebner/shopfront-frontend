@@ -1,16 +1,12 @@
 <template>
   <h1>Product Management Dashboard</h1>
   <h2>Add Product</h2>
-  <product-form button-action="Add Product" @form-payload="submitForm"></product-form>
+  <product-form button-action="Add Product" form-action="post" :user-id="userId"
+    @product-submitted="fetchProducts"></product-form>
   <v-alert v-if="errorMessage" type="error"> {{ errorMessage }}</v-alert>
   <h2>Your Products</h2>
   <loading-spinner v-if="isLoading"></loading-spinner>
-  <product-table
-    v-else
-    @delete-product="deleteProduct"
-    @update-product="updateProduct"
-    :products="products"
-  ></product-table>
+  <product-table v-else @update-product="fetchProducts" :user-id="userId" :products="products"></product-table>
 </template>
 
 <script setup lang="ts">
@@ -18,7 +14,6 @@ import { onBeforeMount, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useTokenStore } from "@/stores/tokenStore";
 import axios, { AxiosError } from "axios";
-import dataFetcher from "@/utils/dataFetcher";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import ProductForm from "@/components/ProductForm.vue";
 import ProductTable from "@/components/ProductTable.vue";
@@ -55,92 +50,5 @@ const fetchProducts = async () => {
     console.log(error);
   }
   isLoading.value = false;
-};
-
-const submitForm = async (
-  id: string,
-  name: string,
-  shortDescription: string,
-  description: string,
-  category: string,
-  quantity: string,
-  price: string,
-  image: string
-) => {
-  try {
-    await axios.post(
-      "http://localhost:5000/api/product",
-      {
-        id,
-        name,
-        short_description: shortDescription,
-        description,
-        category,
-        quantity,
-        price,
-        image_url: image,
-        user_id: userId.value,
-      },
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-    fetchProducts();
-  } catch (e) {
-    const error = e as AxiosError;
-    const message = error.response?.data as string;
-    errorMessage.value = message;
-  }
-};
-
-const deleteProduct = async (id: string) => {
-  try {
-    await axios.delete(`http://localhost:5000/api/product/${id}`);
-    products.value = products.value.filter((product) => product.id !== id);
-  } catch (e) {
-    const error = e as AxiosError;
-    const message = error.response?.data as string;
-    errorMessage.value = message;
-  }
-};
-
-const updateProduct = async (
-  id: string,
-  name: string,
-  shortDescription: string,
-  description: string,
-  category: string,
-  quantity: string,
-  price: string,
-  image: string
-) => {
-  try {
-    await axios.put(
-      `http://localhost:5000/api/product`,
-      {
-        id,
-        name,
-        short_description: shortDescription,
-        description,
-        category,
-        quantity,
-        price,
-        image_url: image,
-        user_id: userId.value,
-      },
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-    fetchProducts();
-  } catch (e) {
-    const error = e as AxiosError;
-    const message = error.response?.data as string;
-    errorMessage.value = message;
-  }
 };
 </script>
