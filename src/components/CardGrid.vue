@@ -2,7 +2,11 @@
   <div class="product-grid-container">
     <div v-for="product in products" :key="product.id" class="product-grid-item">
       <h2 class="product-name">{{ product.name }}</h2>
-      <img :src="product.image_url" class="product-image" alt="" />
+      <div
+        class="product-image"
+        :style="{ backgroundImage: 'url(' + product.image_url + ')' }"
+      ></div>
+
       <p class="product-description">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam, facere?
       </p>
@@ -63,10 +67,10 @@ const addToCart = (product: Product) => {
 }
 
 .product-image {
-  max-width: 100%;
-  height: auto;
-  margin-top: 1rem;
-  margin-bottom: 1rem;
+  height: 200px;
+  width: 100%;
+  background-position: center;
+  background-size: cover;
 }
 
 .product-description {
@@ -84,7 +88,7 @@ const addToCart = (product: Product) => {
   display: flex;
   align-items: center;
   background-color: #fff;
-  color: #1976d2;
+  color: #0275ff;
   padding: 0.5rem 1rem;
   border-radius: 0.25rem;
   font-size: 1rem;

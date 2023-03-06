@@ -1,42 +1,36 @@
 <template>
   <div class="top-bar">
     <div class="top-bar-left">
-      <h3>A Fullstack Project</h3>
+      <h3><router-link class="start-link" to="/"> A Fullstack Project</router-link></h3>
     </div>
     <div class="top-bar-right">
-      <div class="cart">
-        <router-link to="/cart"> cart: {{ cartCount }} </router-link>
-      </div>
       <div class="user">{{ userName }}</div>
-      <button class="burger-menu" @click="showMenu = !showMenu">
-        <span class="burger-menu-icon" :class="{ active: showMenu }">MENU</span>
+      <div class="cart">
+        <router-link to="/cart"
+          ><font-awesome-icon icon="fa-solid fa-cart-shopping" />{{ cartCount }}
+        </router-link>
+      </div>
+      <button class="burger-menu" :class="{ active: isActive }" @click="activateMenu">
+        <font-awesome-icon icon="fa-solid fa-bars" />
       </button>
     </div>
     <transition name="menu-slide">
       <div class="menu" v-show="showMenu">
-        <v-accordion>
-          <v-accordion-item :key="1" :title="'Start'">
-            <router-link to="/">Start</router-link>
-          </v-accordion-item>
-          <v-accordion-item :key="2" :title="'Shop'">
-            <router-link to="/shop">Shop</router-link>
-          </v-accordion-item>
-          <v-accordion-item :key="3" :title="'Login'">
-            <router-link to="/login">Login</router-link>
-          </v-accordion-item>
-          <v-accordion-item
-            v-if="isSeller"
-            :key="4"
-            :title="'Product Management Dashboard'"
+        <div>
+          <router-link to="/">Start</router-link>
+        </div>
+        <div>
+          <router-link to="/shop">Shop</router-link>
+        </div>
+        <div>
+          <router-link to="/login">Login</router-link>
+        </div>
+        <div v-if="isSeller">
+          <router-link to="/productManagementDashboard"
+            >Product Management Dashboard</router-link
           >
-            <router-link to="/productManagementDashboard"
-              >Product Management Dashboard</router-link
-            >
-          </v-accordion-item>
-          <v-accordion-item v-if="userName" :key="5" :title="'Logout'" @click="logoutUser"
-            >Logout
-          </v-accordion-item>
-        </v-accordion>
+        </div>
+        <div v-if="userName" :key="5" :title="'Logout'" @click="logoutUser">Logout</div>
       </div>
     </transition>
   </div>
@@ -57,6 +51,7 @@ defineComponent({
 
 const router = useRouter();
 
+const isActive = ref(false);
 const tokenStore = useTokenStore();
 const showMenu = ref(false);
 const { userName, isSeller } = storeToRefs(tokenStore);
@@ -64,6 +59,11 @@ const cartStore = useCartStore();
 const cartCount = computed(() => {
   return cartStore.products.length;
 });
+
+const activateMenu = () => {
+  isActive.value = !isActive.value;
+  showMenu.value = !showMenu.value;
+};
 
 const logoutUser = async () => {
   try {
@@ -76,7 +76,7 @@ const logoutUser = async () => {
     }
     setTimeout(() => {
       router.push("/login");
-    }, 1500);
+    }, 500);
   } catch (_) {}
 };
 </script>
@@ -85,7 +85,7 @@ const logoutUser = async () => {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  background-color: #333;
+  background-color: #0275ff;
   color: #fff;
   padding: 10px;
 }
@@ -99,6 +99,19 @@ const logoutUser = async () => {
   align-items: center;
 }
 
+.start-link {
+  text-decoration: none;
+  color: #fff;
+}
+
+.cart {
+  padding: 15px;
+}
+
+.user {
+  padding: 5px;
+}
+
 .burger-menu {
   border: none;
   background: none;
@@ -106,28 +119,38 @@ const logoutUser = async () => {
   font-size: 24px;
   margin-right: 10px;
   cursor: pointer;
-}
-
-.burger-menu-icon {
-  width: 20px;
-  height: 20px;
-  border-top: 2px solid #fff;
   transition: transform 0.2s ease-in-out;
 }
 
-.burger-menu-icon.active {
-  transform: rotate(45deg);
+.burger-menu.active {
+  transform: rotate(90deg);
+}
+
+.cart a {
+  color: #fff;
+  text-decoration: none;
 }
 
 .menu {
   position: absolute;
   display: flex;
   flex-direction: column;
-  top: 50px;
+  width: 150px !important;
+  top: 75px;
   right: 0;
-  background-color: #333;
+  background-color: #0275ff;
   color: #fff;
   width: 100%;
+}
+
+.menu div {
+  border-bottom: 1px solid #fff;
+  padding: 5px 0 5px 0;
+}
+
+.menu a {
+  text-decoration: none;
+  color: #fff;
 }
 
 .menu-slide-enter-active {

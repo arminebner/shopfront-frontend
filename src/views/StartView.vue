@@ -1,14 +1,11 @@
 <template>
   <div class="container">
-    <div>
-      <h1>Welcome to our Webshop</h1>
-      <h1 v-if="currentUser">{{ userName }}</h1>
-      <p>
-        We offer a wide variety of products at great prices. Check out our selection
-        below!
-      </p>
-      <router-link :to="`/shop`">Shop Now</router-link>
-    </div>
+    <h1>Welcome to our Webshop</h1>
+    <h1 v-if="userName">{{ userName }}</h1>
+    <p>
+      We offer a wide variety of products at great prices. Check out our selection below!
+    </p>
+    <router-link :to="`/shop`">Shop Now</router-link>
   </div>
 </template>
 
@@ -40,9 +37,8 @@ body {
 
 .container {
   display: flex;
+  flex-direction: column;
   justify-content: center;
-  height: 100vh;
-  margin: 20px;
-  max-width: 1200px;
+  align-items: center;
 }
 </style>

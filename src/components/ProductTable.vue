@@ -27,7 +27,10 @@
           {{ product.category }}
         </td>
         <td>
-          <img :src="product.image_url" />
+          <div
+            class="product-image"
+            :style="{ backgroundImage: 'url(' + product.image_url + ')' }"
+          ></div>
         </td>
         <td>
           {{ product.price }}
@@ -36,8 +39,12 @@
           {{ product.quantity }}
         </td>
         <td>
-          <v-btn id="edit-button" @click="editProduct(product)">edit</v-btn>
-          <v-btn id="delete-button" @click="deleteProduct(product.id)">delete</v-btn>
+          <v-btn class="button edit-button" @click="editProduct(product)"
+            ><font-awesome-icon icon="fa-solid fa-pen-to-square"
+          /></v-btn>
+          <v-btn class="button delete-button" @click="deleteProduct(product.id)"
+            ><font-awesome-icon icon="fa-solid fa-trash"
+          /></v-btn>
         </td>
       </tr>
     </tbody>
@@ -54,7 +61,6 @@
           :product="popup.payload"
           form-action="put"
           :user-id="props.userId"
-          button-action="Update Product"
           @product-submitted="updateProduct"
         ></product-form>
       </div>
@@ -129,6 +135,17 @@ const deleteProduct = async (id: string) => {
 };
 </script>
 <style>
+.button {
+  cursor: pointer;
+}
+
+.product-image {
+  height: 50px;
+  width: 100%;
+  background-position: center;
+  background-size: cover;
+}
+
 .overlay {
   position: fixed;
   top: 0;

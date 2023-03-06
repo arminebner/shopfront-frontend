@@ -28,6 +28,13 @@ const addItemInstance = (cartItem: CartItem) => {
 </script>
 
 <style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 h1 {
   font-size: 48px;
   font-weight: bold;

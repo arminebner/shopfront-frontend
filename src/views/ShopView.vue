@@ -1,23 +1,28 @@
 <template>
-  <div class="container"></div>
-
-  <h1>Products</h1>
-  <p class="mb-10 text-center">
-    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima ad nobis ab quae
-    consequatur eius? Commodi repellendus iure id rem?
-  </p>
-  <form-kit type="select" @change="fetchProducts($event)" label="Category" name="category"
-    :options="['All', 'Category1', 'Category2', 'Category3']" />
-  <loading-spinner v-if="isLoading"></loading-spinner>
-  <card-grid v-else :products="products"></card-grid>
+  <div class="container">
+    <h1>Products</h1>
+    <p class="mb-10 text-center">
+      Lorem ipsum dolor sit amet, consectetur adipisicing elit. Minima ad nobis ab quae
+      consequatur eius? Commodi repellendus iure id rem?
+    </p>
+    <form-kit
+      type="select"
+      @change="fetchProducts($event)"
+      label="Category"
+      name="category"
+      :options="['All', 'Category1', 'Category2', 'Category3']"
+    />
+    <loading-spinner v-if="isLoading"></loading-spinner>
+    <card-grid v-else :products="products"></card-grid>
+  </div>
 </template>
 
 <script setup lang="ts">
-import CardGrid from "@/components/CardGrid.vue";
 import { onBeforeMount, ref } from "vue";
+import axios from "axios";
+import CardGrid from "@/components/CardGrid.vue";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import type Product from "@/types/product";
-import axios from "axios";
 
 onBeforeMount(() => {
   fetchProducts("_");
@@ -41,6 +46,14 @@ const fetchProducts = async (event: any) => {
 };
 </script>
 <style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  max-width: 75%;
+  margin: 0 auto;
+}
+
 h1 {
   font-size: 48px;
   font-weight: bold;

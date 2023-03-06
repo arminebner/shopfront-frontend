@@ -2,14 +2,42 @@
   <div class="container">
     <form-kit type="form" :value="formData" @submit="submit">
       <form-kit type="text" label="Product name" name="name" validation="required" />
-      <form-kit type="textarea" label="Short description" name="shortDescription" rows="2" validation="required" />
-      <form-kit type="textarea" label="Description" name="description" rows="10" validation="required" />
-      <form-kit type="select" label="Select the category" name="category"
-        :options="['Category1', 'Category2', 'Category3']" />
+      <form-kit
+        type="textarea"
+        label="Short description"
+        name="shortDescription"
+        rows="2"
+        validation="required"
+      />
+      <form-kit
+        type="textarea"
+        label="Description"
+        name="description"
+        rows="10"
+        validation="required"
+      />
+      <form-kit
+        type="select"
+        label="Select the category"
+        name="category"
+        :options="['Category1', 'Category2', 'Category3']"
+      />
       <form-kit type="number" label="Quantity" name="quantity" validation="required" />
-      <form-kit type="text" label="Price" name="price" validation="required|matches:/^\d+\.\d+?$/" />
-      <form-kit type="file" label="Productmage" name="productImage" accept=".jpeg,.jpg,.png"
-        help="Select a product image." multiple="false" validation="required" />
+      <form-kit
+        type="text"
+        label="Price"
+        name="price"
+        validation="required|matches:/^\d+\.\d+?$/"
+      />
+      <form-kit
+        type="file"
+        label="Productmage"
+        name="productImage"
+        accept=".jpeg,.jpg,.png"
+        help="Select a product image."
+        multiple="false"
+        validation="required"
+      />
     </form-kit>
   </div>
 </template>
@@ -24,11 +52,6 @@ const props = defineProps({
     type: Object as PropType<Product>,
   },
   userId: {
-    type: String,
-    required: true,
-    default: "Default"
-  },
-  buttonAction: {
     type: String,
     required: true,
     default: "Default"

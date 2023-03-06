@@ -49,7 +49,7 @@
           <div class="subtitle-1 font-weight-bold">Total: {{ totalAmount }}</div>
         </td>
         <td>
-          <v-btn block @click="startOrderingProcess">Buy now!</v-btn>
+          <button class="button" @click="startOrderingProcess">Buy now!</button>
         </td>
       </tr>
     </tbody>
@@ -93,6 +93,14 @@ const addItemInstance = (cartItem: CartItem) => {
 </script>
 
 <style scoped>
+.button {
+  padding: 20px;
+  border-radius: 5px;
+  background-color: #0275ff;
+  color: #fff;
+  cursor: pointer;
+}
+
 @media only screen and (max-width: 600px) {
   .caption {
     font-size: 12px !important;

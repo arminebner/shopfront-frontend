@@ -19,12 +19,15 @@
       />
       <form-kit type="checkbox" label="Register as seller?" name="isSeller" />
     </form-kit>
+    <p class="login-link">
+      Already have an account? Back to <router-link to="/login">login</router-link>
+    </p>
   </div>
 </template>
 <script setup lang="ts">
 import { defineComponent, ref } from "vue";
-import axios, { AxiosError } from "axios";
 import { useRouter } from "vue-router";
+import axios, { AxiosError } from "axios";
 
 defineComponent({
   name: "Register",
@@ -46,7 +49,7 @@ const submitRegistration = async (data: any) => {
     // TODO add toast message
     setTimeout(() => {
       router.push("/login");
-    }, 1500);
+    }, 1000);
   } catch (e) {
     const error = e as AxiosError;
     const message = error.response?.data as string;
@@ -56,11 +59,23 @@ const submitRegistration = async (data: any) => {
 };
 </script>
 <style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 h1 {
   font-size: 48px;
   font-weight: bold;
   text-align: center;
   margin-top: 50px;
   margin-bottom: 20px;
+}
+
+.login-link a {
+  text-decoration: none;
+  color: #0275ff;
 }
 </style>

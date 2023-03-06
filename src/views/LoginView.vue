@@ -3,17 +3,25 @@
     <h1>Login</h1>
     <form-kit type="form" @submit="submitLogin">
       <form-kit type="email" label="Email" name="email" validation="required|email" />
-      <form-kit type="password" label="Password" name="password" validation="required|length:8" />
+      <form-kit
+        type="password"
+        label="Password"
+        name="password"
+        validation="required|length:8"
+      />
     </form-kit>
+    <p class="register-link">
+      Don't have an account yet? Click
+      <router-link to="/register">here</router-link> to register
+    </p>
   </div>
-  <router-link to="/register">Don't have an account yet? Click here to register</router-link>
 </template>
 
 <script setup lang="ts">
-import { useTokenStore } from "@/stores/tokenStore";
-import axios, { AxiosError } from "axios";
 import { defineComponent, ref } from "vue";
 import { useRouter } from "vue-router";
+import { useTokenStore } from "@/stores/tokenStore";
+import axios, { AxiosError } from "axios";
 import jwt_decode from "jwt-decode";
 
 defineComponent({
@@ -37,11 +45,11 @@ const submitLogin = async (data: any) => {
     );
     try {
       store.addToken(jwt_decode(result.data.accessToken));
-    } catch (_) { }
+    } catch (_) {}
     axios.defaults.headers.common["authorization"] = `Bearer ${result.data.accessToken}`;
     setTimeout(() => {
       router.push("/");
-    }, 1500);
+    }, 1000);
   } catch (e) {
     const error = e as AxiosError;
     const message = error.response?.data as string;
@@ -51,11 +59,21 @@ const submitLogin = async (data: any) => {
 </script>
 
 <style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
 h1 {
   font-size: 48px;
   font-weight: bold;
-  text-align: center;
   margin-top: 50px;
   margin-bottom: 20px;
+}
+
+.register-link a {
+  color: #0275ff;
 }
 </style>

@@ -1,11 +1,14 @@
 <template>
   <div class="container">
-    <img :src="product.image_url" :alt="product.name" style="max-width: 100%" />
+    <div
+      class="product-image"
+      :style="{ backgroundImage: 'url(' + product.image_url + ')' }"
+    ></div>
     <h1>{{ product.name }}</h1>
     <p>{{ product.short_description }}</p>
     <p>{{ product.description }}</p>
     <p>Price: {{ product.price }}</p>
-    <button @click="addToCart(product)">Add to Cart</button>
+    <button class="button" @click="addToCart(product)">Add to Cart</button>
   </div>
 </template>
 
@@ -46,6 +49,20 @@ const addToCart = (product: Product) => {
 };
 </script>
 <style scoped>
+.container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.product-image {
+  height: 400px;
+  width: 400px;
+  background-position: center;
+  background-size: cover;
+}
+
 h1 {
   font-size: 48px;
   font-weight: bold;
@@ -58,5 +75,13 @@ p {
   font-size: 24px;
   text-align: center;
   margin-bottom: 50px;
+}
+
+.button {
+  padding: 20px;
+  border-radius: 5px;
+  background-color: #0275ff;
+  color: #fff;
+  cursor: pointer;
 }
 </style>

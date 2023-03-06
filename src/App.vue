@@ -6,5 +6,3 @@
 <script setup lang="ts">
 import BaseNavigation from "./components/BaseNavigation.vue";
 </script>
-
-<style scoped></style>
