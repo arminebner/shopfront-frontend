@@ -1,8 +1,8 @@
 <template>
-  <base-navigation />
+  <basic-navigation />
   <router-view></router-view>
 </template>
 
 <script setup lang="ts">
-import BaseNavigation from "./components/BaseNavigation.vue";
+import BasicNavigation from "./components/BasicNavigation.vue";
 </script>

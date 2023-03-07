@@ -5,7 +5,9 @@
     <p>
       We offer a wide variety of products at great prices. Check out our selection below!
     </p>
-    <router-link :to="`/shop`">Shop Now</router-link>
+    <basic-button>
+      <router-link class="link" :to="`/shop`">Shop Now</router-link>
+    </basic-button>
   </div>
 </template>
 
@@ -13,11 +15,12 @@
 import { defineComponent, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useTokenStore } from "@/stores/tokenStore";
+import BasicButton from "@/components/BasicButton.vue";
 import type User from "@/types/user";
 
 defineComponent({
   name: "Start",
-  components: {},
+  components: { BasicButton },
 });
 
 const currentUser = ref<User>({
@@ -40,5 +43,10 @@ body {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+}
+
+.basic-button .link {
+  text-decoration: none;
+  color: #fff;
 }
 </style>

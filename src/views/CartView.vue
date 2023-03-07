@@ -2,9 +2,10 @@
   <div class="container">
     <h1 class="text-center">Your Shopping Cart</h1>
     <shopping-cart-table
-      :products="cartItems"
+      :products="products"
       @remove-from-cart="removeProductCartStore"
-      @add-item-instance="addItemInstance"
+      @increase-amount="increaseAmount"
+      @decrease-amount="decreaseAmount"
     ></shopping-cart-table>
   </div>
 </template>
@@ -14,16 +15,21 @@ import { useCartStore } from "@/stores/cartStore";
 import ShoppingCartTable from "@/components/ShoppingCartTable.vue";
 import { storeToRefs } from "pinia";
 import type CartItem from "@/types/cartItem";
+import type Product from "@/types/product";
 
 const store = useCartStore();
-const { cartItems } = storeToRefs(store);
+const { products } = storeToRefs(store);
 
-const removeProductCartStore = (id: string) => {
-  store.deleteItem(id);
+const removeProductCartStore = (product: CartItem) => {
+  store.deleteItem(product);
 };
 
-const addItemInstance = (cartItem: CartItem) => {
+const increaseAmount = (cartItem: CartItem) => {
   store.addItem(cartItem);
+};
+
+const decreaseAmount = (cartItem: CartItem) => {
+  store.decreaseAmount(cartItem);
 };
 </script>
 

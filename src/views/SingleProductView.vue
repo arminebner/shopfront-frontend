@@ -1,23 +1,26 @@
 <template>
   <div class="container">
-    <div
-      class="product-image"
-      :style="{ backgroundImage: 'url(' + product.image_url + ')' }"
-    ></div>
+    <div class="product-image" :style="{ backgroundImage: 'url(' + product.image_url + ')' }"></div>
     <h1>{{ product.name }}</h1>
     <p>{{ product.short_description }}</p>
     <p>{{ product.description }}</p>
     <p>Price: {{ product.price }}</p>
-    <button class="button" @click="addToCart(product)">Add to Cart</button>
+    <basic-button @click="addToCart(product)">Add to cart</basic-button>
   </div>
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref } from "vue";
-import { useRoute } from "vue-router";
-import type Product from "@/types/product";
-import dataFetcher from "@/utils/dataFetcher";
+import { defineComponent, onBeforeMount, ref } from "vue";
 import { useCartStore } from "@/stores/cartStore";
+import { useRoute } from "vue-router";
+import BasicButton from "@/components/BasicButton.vue";
+import dataFetcher from "@/utils/dataFetcher";
+import type Product from "@/types/product";
+
+defineComponent({
+  name: "SIngleProductView",
+  components: { BasicButton },
+});
 
 onBeforeMount(() => {
   const params = useRoute().params;
@@ -75,13 +78,5 @@ p {
   font-size: 24px;
   text-align: center;
   margin-bottom: 50px;
-}
-
-.button {
-  padding: 20px;
-  border-radius: 5px;
-  background-color: #0275ff;
-  color: #fff;
-  cursor: pointer;
 }
 </style>

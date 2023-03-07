@@ -1,22 +1,24 @@
 <template>
-  <div class="product-grid-container">
-    <div v-for="product in products" :key="product.id" class="product-grid-item">
-      <h2 class="product-name">{{ product.name }}</h2>
+  <div class="product-list">
+    <div v-for="product in products" :key="product.id" class="product-card">
       <div
         class="product-image"
         :style="{ backgroundImage: 'url(' + product.image_url + ')' }"
       ></div>
-
-      <p class="product-description">
-        Lorem ipsum dolor sit amet consectetur adipisicing elit. Aperiam, facere?
-      </p>
-      <div class="product-actions">
-        <button class="add-to-cart-button" @click="addToCart(product)">
-          <span>Add to Cart</span>
-        </button>
-        <router-link :to="`/product/${product.id}`" class="info-button">
-          <span>Info</span>
-        </router-link>
+      <div class="product-details">
+        <div class="product-name">{{ product.name }}</div>
+        <div class="product-description">{{ product.short_description }}</div>
+        <div class="product-price">{{ product.price }}</div>
+        <div class="product-actions">
+          <font-awesome-icon
+            class="action"
+            icon="fa-solid fa-cart-shopping"
+            @click="addToCart(product)"
+          />
+          <router-link class="action link" :to="`/product/${product.id}`">
+            <font-awesome-icon icon="fa-solid fa-circle-info" />
+          </router-link>
+        </div>
       </div>
     </div>
   </div>
@@ -42,88 +44,65 @@ const addToCart = (product: Product) => {
 </script>
 
 <style scoped>
-.product-grid-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-  grid-gap: 1rem;
-  margin: 0 -0.5rem;
+.product-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 16px;
 }
 
-.product-grid-item {
+.product-card {
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background-color: #1976d2;
-  color: #fff;
-  padding: 1rem;
-  box-sizing: border-box;
-  height: 100%;
+  min-width: 200px;
+  width: 100%;
+  max-width: 300px;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.2);
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.product-image {
+  width: 100%;
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+}
+
+.product-details {
+  padding: 16px;
 }
 
 .product-name {
   font-size: 1.2rem;
   font-weight: bold;
-  margin: 0;
-}
-
-.product-image {
-  height: 200px;
-  width: 100%;
-  background-position: center;
-  background-size: cover;
+  margin-bottom: 8px;
 }
 
 .product-description {
-  margin: 0;
+  font-size: 1rem;
+  margin-bottom: 8px;
+}
+
+.product-price {
+  font-size: 1.2rem;
+  font-weight: bold;
+  margin-bottom: 8px;
 }
 
 .product-actions {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-top: auto;
 }
 
-.add-to-cart-button {
-  display: flex;
-  align-items: center;
-  background-color: #fff;
-  color: #0275ff;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  font-size: 1rem;
-  text-transform: uppercase;
+.action {
   cursor: pointer;
 }
 
-.info-button {
-  display: flex;
-  align-items: center;
-  background-color: transparent;
-  color: #fff;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  font-size: 1rem;
-  text-transform: uppercase;
+.link {
   text-decoration: none;
-}
-
-@media (max-width: 599px) {
-  .product-grid-container {
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-  }
-
-  .product-name {
-    font-size: 1rem;
-  }
-
-  .product-image {
-    margin-top: 0.5rem;
-    margin-bottom: 0.5rem;
-  }
-
-  .product-description {
-    font-size: 0.8rem;
-  }
+  color: #4d4d4d;
 }
 </style>

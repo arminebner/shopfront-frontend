@@ -1,5 +1,5 @@
 <template>
-  <table fixed-header height="300px">
+  <table>
     <thead>
       <tr>
         <th class="text-left">Name</th>
@@ -70,9 +70,9 @@
 
 <script setup lang="ts">
 import { ref, type PropType } from "vue";
-import type Product from "@/types/product";
-import ProductForm from "@/components/ProductForm.vue";
 import axios, { AxiosError } from "axios";
+import ProductForm from "@/components/ProductForm.vue";
+import type Product from "@/types/product";
 
 const props = defineProps({
   products: {
@@ -134,7 +134,32 @@ const deleteProduct = async (id: string) => {
   }
 };
 </script>
-<style>
+<style scoped>
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr:last-child td {
+  border-bottom: none;
+}
+
 .button {
   cursor: pointer;
 }
@@ -187,5 +212,17 @@ const deleteProduct = async (id: string) => {
   background-color: transparent;
   font-size: 1.2em;
   cursor: pointer;
+}
+
+@media (max-width: 768px) {
+  .product-image {
+    display: none;
+  }
+
+  .button {
+    display: block;
+    margin-right: 0;
+    margin-bottom: 8px;
+  }
 }
 </style>

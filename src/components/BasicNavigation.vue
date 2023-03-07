@@ -1,39 +1,55 @@
 <template>
   <div class="top-bar">
     <div class="top-bar-left">
-      <h3><router-link class="start-link" to="/"> A Fullstack Project</router-link></h3>
+      <h3>
+        <router-link @click="showMenu = false" class="start-link" to="/">
+          A Fullstack Project</router-link
+        >
+      </h3>
     </div>
     <div class="top-bar-right">
       <div class="user">{{ userName }}</div>
       <div class="cart">
-        <router-link to="/cart"
+        <router-link @click="showMenu = false" to="/cart"
           ><font-awesome-icon icon="fa-solid fa-cart-shopping" />{{ cartCount }}
         </router-link>
       </div>
-      <button class="burger-menu" :class="{ active: isActive }" @click="activateMenu">
+      <button
+        class="burger-menu"
+        :class="{ active: showMenu }"
+        @click="showMenu = !showMenu"
+      >
         <font-awesome-icon icon="fa-solid fa-bars" />
       </button>
     </div>
     <transition name="menu-slide">
       <div class="menu" v-show="showMenu">
         <div>
-          <router-link to="/">Start</router-link>
+          <router-link class="link" @click="showMenu = false" to="/">Start</router-link>
         </div>
         <div>
-          <router-link to="/shop">Shop</router-link>
+          <router-link class="link" @click="showMenu = false" to="/shop"
+            >Shop</router-link
+          >
         </div>
         <div>
-          <router-link to="/login">Login</router-link>
+          <router-link class="link" @click="showMenu = false" to="/login"
+            >Login</router-link
+          >
         </div>
         <div v-if="isSeller">
-          <router-link to="/productManagementDashboard"
+          <router-link
+            class="link"
+            @click="showMenu = false"
+            to="/productManagementDashboard"
             >Product Management Dashboard</router-link
           >
         </div>
-        <div v-if="userName" :key="5" :title="'Logout'" @click="logoutUser">Logout</div>
+        <div v-if="userName" class="link" @click="logoutUser">Logout</div>
       </div>
     </transition>
   </div>
+  <div v-show="showMenu" class="overlay" @click="showMenu = false"></div>
 </template>
 
 <script setup lang="ts">
@@ -45,27 +61,22 @@ import { useTokenStore } from "@/stores/tokenStore";
 import axios from "axios";
 
 defineComponent({
-  name: "BaseNavigation",
+  name: "BasicNavigation",
   components: {},
 });
 
 const router = useRouter();
 
-const isActive = ref(false);
 const tokenStore = useTokenStore();
 const showMenu = ref(false);
 const { userName, isSeller } = storeToRefs(tokenStore);
 const cartStore = useCartStore();
 const cartCount = computed(() => {
-  return cartStore.products.length;
+  return cartStore.productCount;
 });
 
-const activateMenu = () => {
-  isActive.value = !isActive.value;
-  showMenu.value = !showMenu.value;
-};
-
 const logoutUser = async () => {
+  showMenu.value = false;
   try {
     const result = await axios("http://localhost:5000/api/users/logout", {
       withCredentials: true,
@@ -82,12 +93,15 @@ const logoutUser = async () => {
 </script>
 <style scoped>
 .top-bar {
+  position: sticky;
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
   background-color: #0275ff;
   color: #fff;
   padding: 10px;
+  z-index: 1000 !important;
 }
 
 .top-bar-left h3 {
@@ -140,7 +154,7 @@ const logoutUser = async () => {
   right: 0;
   background-color: #0275ff;
   color: #fff;
-  width: 100%;
+  z-index: 1000;
 }
 
 .menu div {
@@ -148,9 +162,21 @@ const logoutUser = async () => {
   padding: 5px 0 5px 0;
 }
 
-.menu a {
+.link {
+  display: block;
+  padding-left: 1rem;
   text-decoration: none;
   color: #fff;
+}
+
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 999;
 }
 
 .menu-slide-enter-active {

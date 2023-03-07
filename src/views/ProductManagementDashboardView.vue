@@ -9,13 +9,11 @@
       :user-id="userId"
       :products="products"
     ></product-table>
-    <h2>Add Product</h2>
-    <button class="add-product" @click="show = true">Add a new product</button>
+    <basic-button @click="show = true">Add a new poduct</basic-button>
     <div v-if="show">
       <div class="overlay" @click="show = false"></div>
       <div class="dialog">
         <div class="header">
-          Add a new Product
           <button class="close" @click="show = false">X</button>
         </div>
         <div class="content">
@@ -31,14 +29,20 @@
 </template>
 
 <script setup lang="ts">
-import { onBeforeMount, ref } from "vue";
+import { defineComponent, onBeforeMount, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useTokenStore } from "@/stores/tokenStore";
 import axios, { AxiosError } from "axios";
+import BasicButton from "@/components/BasicButton.vue";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import ProductForm from "@/components/ProductForm.vue";
 import ProductTable from "@/components/ProductTable.vue";
 import type Product from "@/types/product";
+
+defineComponent({
+  name: "ProductManagementDashboard",
+  components: { BasicButton },
+});
 
 const show = ref(false);
 const tokenStore = useTokenStore();
@@ -82,14 +86,6 @@ h1 {
 
 h2 {
   text-align: center;
-}
-
-.add-product {
-  padding: 20px;
-  border-radius: 5px;
-  background-color: #0275ff;
-  color: #fff;
-  cursor: pointer;
 }
 
 .overlay {

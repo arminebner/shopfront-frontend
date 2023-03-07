@@ -12,17 +12,7 @@
     <tbody>
       <tr v-for="product in products" :key="product.id">
         <td>
-          <v-row align="center" justify="space-between">
-            <div>{{ product.quantity }}</div>
-            <div>
-              <v-btn icon @click="addItemInstance(product)">
-                <v-icon>mdi-menu-up</v-icon>
-              </v-btn>
-              <v-btn icon @click="removeFromCart(product.cartId)">
-                <v-icon>mdi-menu-down</v-icon>
-              </v-btn>
-            </div>
-          </v-row>
+          {{ product.quantity }}
         </td>
         <td>
           <div class="subtitle-1">{{ product.name }}</div>
@@ -36,9 +26,15 @@
           </div>
         </td>
         <td>
-          <v-btn icon @click="removeFromCart(product.cartId)">
-            <v-icon>mdi-delete</v-icon>
-          </v-btn>
+          <button @click="increaseAmount(product)">
+            <font-awesome-icon icon="fa-solid fa-plus" />
+          </button>
+          <button @click="decreaseAmount(product)">
+            <font-awesome-icon icon="fa-solid fa-minus" />
+          </button>
+          <button @click="removeFromCart(product)">
+            <font-awesome-icon icon="fa-solid fa-trash" />
+          </button>
         </td>
       </tr>
       <tr v-if="products.length > 0">
@@ -49,7 +45,7 @@
           <div class="subtitle-1 font-weight-bold">Total: {{ totalAmount }}</div>
         </td>
         <td>
-          <button class="button" @click="startOrderingProcess">Buy now!</button>
+          <basic-button @click="startOrderingProcess">Buy now!</basic-button>
         </td>
       </tr>
     </tbody>
@@ -57,8 +53,15 @@
 </template>
 
 <script setup lang="ts">
-import { computed, type PropType } from "vue";
+import { computed, defineComponent, type PropType } from "vue";
+import BasicButton from "./BasicButton.vue";
 import type CartItem from "@/types/cartItem";
+import { ca } from "@formkit/i18n";
+
+defineComponent({
+  name: "ShoppingCartTable",
+  components: { BasicButton },
+});
 
 const props = defineProps({
   products: {
@@ -68,8 +71,9 @@ const props = defineProps({
 });
 
 const emit = defineEmits<{
-  (e: "removeFromCart", cartId: string): void;
-  (e: "addItemInstance", cartItem: CartItem): void;
+  (e: "removeFromCart", cartItem: CartItem): void;
+  (e: "increaseAmount", cartItem: CartItem): void;
+  (e: "decreaseAmount", cartItem: CartItem): void
 }>();
 
 const totalAmount = computed(() => {
@@ -83,31 +87,41 @@ const startOrderingProcess = () => {
   console.log("started ordering process");
 };
 
-const removeFromCart = (cartId: string) => {
-  emit("removeFromCart", cartId)
+const removeFromCart = (cartItem: CartItem) => {
+  emit("removeFromCart", cartItem)
 }
 
-const addItemInstance = (cartItem: CartItem) => {
-  emit("addItemInstance", cartItem)
+const increaseAmount = (cartItem: CartItem) => {
+  emit("increaseAmount", cartItem)
+}
+const decreaseAmount = (cartItem: CartItem) => {
+  emit("decreaseAmount", cartItem)
 }
 </script>
 
 <style scoped>
-.button {
-  padding: 20px;
-  border-radius: 5px;
-  background-color: #0275ff;
-  color: #fff;
-  cursor: pointer;
+table {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-@media only screen and (max-width: 600px) {
-  .caption {
-    font-size: 12px !important;
-  }
+th,
+td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
 
-  .subtitle-1 {
-    font-size: 14px !important;
-  }
+th {
+  background-color: #f2f2f2;
+  font-weight: bold;
+}
+
+tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+tr:last-child td {
+  border-bottom: none;
 }
 </style>

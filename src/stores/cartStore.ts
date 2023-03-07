@@ -1,58 +1,53 @@
+import { computed, ref } from 'vue'
+import { defineStore } from 'pinia'
 import type CartItem from '@/types/cartItem'
 import type Product from '@/types/product'
-import { defineStore } from 'pinia'
-import { computed, ref } from 'vue'
 
 export const useCartStore = defineStore('cart', () => {
   const products = ref<CartItem[]>([])
 
-  const addItem = (product: Product) => {
-    const uuid = crypto.randomUUID()
-    products.value.push({ ...product, cartId: uuid, quantity: 1 })
+  const addItem = (product: Product | CartItem) => {
+    if (!products.value.find(p => p.id === product.id)) {
+      products.value.push({ ...product, quantity: 1 })
+    } else {
+      const cartItem = products.value.find(p => p.id === product.id) as CartItem
+      cartItem.quantity += 1
+      const index = products.value.indexOf(cartItem)
+      products.value.splice(index, 1, cartItem)
+    }
   }
 
-  const deleteItem = (cartId: string) => {
-    products.value = products.value.filter(i => i.cartId !== cartId)
+  const decreaseAmount = (product: CartItem) => {
+    const cartItem = products.value.find(p => p.id === product.id) as CartItem
+    if (cartItem.quantity > 1) {
+      console.log(cartItem.quantity)
+      cartItem.quantity -= 1
+      console.log(cartItem.quantity)
+      const index = products.value.indexOf(cartItem)
+      console.log('hello')
+      products.value.splice(index, 1, cartItem)
+    } else {
+      deleteItem(product)
+    }
   }
 
-  const cartItems = computed(() => {
-    return bundleCartItems(products.value)
+  const deleteItem = (product: CartItem) => {
+    const cartItem = products.value.find(p => p.id === product.id) as CartItem
+    const index = products.value.indexOf(cartItem)
+    products.value.splice(index, 1)
+  }
+
+  const productCount = computed(() => {
+    return products.value.reduce((acc: any, cartItem: CartItem) => {
+      return acc + cartItem.quantity
+    }, 0)
   })
 
   return {
     products,
-    cartItems,
+    productCount,
     addItem,
     deleteItem,
+    decreaseAmount,
   }
 })
-
-function bundleCartItems(products: Product[]) {
-  const quantityMap = new Map()
-  const ids = products.map(p => p.id)
-
-  ids.forEach(id => {
-    if (quantityMap.has(id)) {
-      let currentQuantity = quantityMap.get(id)
-      currentQuantity.quantity += 1
-      quantityMap.set(id, currentQuantity)
-    } else {
-      quantityMap.set(id, { quantity: 1 })
-    }
-  })
-
-  const itemsWithQuantity = products.map(p => {
-    const quantity = quantityMap.get(p.id).quantity
-    return { ...p, quantity }
-  })
-
-  const result = <any>[]
-  const keysArray = Array.from(quantityMap.keys())
-
-  keysArray.forEach(mapItem => {
-    const a = itemsWithQuantity.find(item => item.id === mapItem)
-    result.push(a)
-  })
-
-  return result
-}
